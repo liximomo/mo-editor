@@ -2,16 +2,17 @@
 
 .MoEditor__Popover {
   position: absolute;
+  z-index: $toolbar-zIndex;
   left: 0;
   top: 0;
 
   color: $toolbar-text-color;
   background-color: $toolbar-background-color;
   border-radius: 5px;
-  padding: 4px 6px;
-  font-size: 0.8em;
+  padding: 0 10px;
 
   visibility: hidden;
+  display: none;
   pointer-events: none;
   transform: translate3d(0, 0, 0);
 }
@@ -19,28 +20,35 @@
 .MoEditor__Popover.is-active {
   visibility: visible;
   pointer-events: auto;
-  will-change: transform;
-  transition: transform .2s ease-out;
+  display: inline-block;
+  // will-change: transform;
+  // transition: transform 180ms ease-out;
+
+  &.is-top {
+    animation: pop-upwards 180ms forwards linear;
+  }
+
+  &.is-bottom {
+    animation: pop-downwards 180ms forwards linear;
+  }
 }
 
-.MoEditor__Popover.is-top {
-  content: "";
+.MoEditor__Popover::after {
+  content: '';
   position: absolute;
-  bottom: -5px;
   left: 50%;
-  margin-left: -5px;
-  border-top: 5px solid $toolbar-background-color;
-  border-right: 5px solid transparent;
-  border-left: 5px solid transparent;
+  margin-left: -$toolbar-arrow-size;
+  border: $toolbar-arrow-size solid transparent;
 }
 
-.MoEditor__Popover.is-bottom {
-  content: "";
-  position: absolute;
-  bottom: -5px;
-  left: 50%;
-  margin-left: -5px;
-  border-top: 5px solid $toolbar-background-color;
-  border-right: 5px solid transparent;
-  border-left: 5px solid transparent;
+.MoEditor__Popover.is-top::after {
+  bottom: -$toolbar-arrow-size;
+  border-bottom-width: 0px;
+  border-top-color: $toolbar-background-color;
+}
+
+.MoEditor__Popover.is-bottom::after {
+  top: -$toolbar-arrow-size;
+  border-top-width: 0px;
+  border-bottom-color: $toolbar-background-color;
 }

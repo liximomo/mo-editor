@@ -1,3 +1,5 @@
+@import './theme/default';
+
 .MoEditor {
   max-width: 700px;
   background: #fbffff;
@@ -8,4 +10,8 @@
 
 .MoEditor__editorContainer {
   position: relative;
+}
+
+.DraftEditor-root {
+  z-index: $editor-editable-zIndex;
 }

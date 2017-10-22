@@ -7,6 +7,7 @@ import commander from './commands/CommandHub';
 import Popover from './ui/Popover';
 
 import 'draft-js/dist/Draft.css';
+import './style/global.scss';
 import './Editor.scss';
 
 export default class Editor extends Component {
@@ -25,7 +26,7 @@ export default class Editor extends Component {
 
   setEditorContainerNode = node => {
     this._editorContainer = node;
-  }
+  };
 
   getEditor = () => {
     return this._editor;
@@ -47,9 +48,9 @@ export default class Editor extends Component {
     const editorState = this.getEditorState();
     const selection = editorState.getSelection();
     let hasValidSelection = false;
-    
+
     hasValidSelection = !selection.isCollapsed();
-  
+
     return this.state.isPopoverActive || hasValidSelection;
   }
 
@@ -71,7 +72,11 @@ export default class Editor extends Component {
             editorState={this.state.editorState}
             onChange={this.handleChange}
           />
-          <Popover active={this.shouldActivePopover()} positionNode={this._editorContainer} selection={selection}>
+          <Popover
+            active={this.shouldActivePopover()}
+            positionNode={this._editorContainer}
+            selection={selection}
+          >
             {popoverView}
           </Popover>
         </div>
