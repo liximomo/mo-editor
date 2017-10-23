@@ -1,6 +1,6 @@
 import { EditorState, RichUtils } from 'draft-js';
 import withLinkEntity from '../cells/LinkEntity';
-import removeLink from './removeLink';
+import removeLink from './CommandRemoveLink';
 
 export default function setLink(editorState, url) {
   if (url.trim() === '') {
@@ -19,7 +19,7 @@ export default function setLink(editorState, url) {
     }
   }
 
-  const { contentStateWithEntity, entityKey }= withLinkEntity(contentState, newUrl);
+  const { contentStateWithEntity, entityKey } = withLinkEntity(contentState, newUrl);
   const newEditorState = EditorState.set(editorState, { currentContent: contentStateWithEntity });
   return RichUtils.toggleLink(newEditorState, newEditorState.getSelection(), entityKey);
 }

@@ -1,6 +1,6 @@
 @import '../theme/default';
 
-.MoEditor__Popover {
+.MoEditorPopover {
   position: absolute;
   z-index: $toolbar-zIndex;
   left: 0;
@@ -17,7 +17,7 @@
   transform: translate3d(0, 0, 0);
 }
 
-.MoEditor__Popover.is-active {
+.MoEditorPopover.is-active {
   visibility: visible;
   pointer-events: auto;
   display: inline-block;
@@ -33,7 +33,7 @@
   }
 }
 
-.MoEditor__Popover::after {
+.MoEditorPopover::after {
   content: '';
   position: absolute;
   left: 50%;
@@ -41,13 +41,13 @@
   border: $toolbar-arrow-size solid transparent;
 }
 
-.MoEditor__Popover.is-top::after {
+.MoEditorPopover.is-top::after {
   bottom: -$toolbar-arrow-size;
   border-bottom-width: 0px;
   border-top-color: $toolbar-background-color;
 }
 
-.MoEditor__Popover.is-bottom::after {
+.MoEditorPopover.is-bottom::after {
   top: -$toolbar-arrow-size;
   border-top-width: 0px;
   border-bottom-color: $toolbar-background-color;

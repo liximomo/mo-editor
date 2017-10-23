@@ -1,22 +1,18 @@
-import * as Command from './TypeOfCommand';
-import setLink from './setLink';
+const commander = {};
 
-const commander = {
-  setLink,
-};
-
-export default commander;
+export function injectCommand(cmd, hanlde) {
+  if (commander[cmd]) {
+    throw new Error(`command '${cmd}' has already registed`);
+  }
+  commander[cmd] = hanlde;
+}
 
 export function execCommand(command, ...args) {
-  let cmdFn;
-  switch (command) {
-    case Command.SET_LINK:
-      cmdFn = setLink;
-      break;
-    default:
-      cmdFn = () => new Error(`unkonw command '${command}'`);
-      break;
+  const cmdFn = commander[command];
+  if (!cmdFn) {
+    throw new Error(`can not exec command '${command}' without registration`);
   }
 
+  console.log(...args);
   return cmdFn(...args);
 }

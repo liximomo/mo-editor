@@ -17,7 +17,7 @@ export default class Popover extends Component {
   static defaultProps = {
     active: false,
     direction: 'top',
-    offset: 5,
+    offset: 6,
   };
 
   componentDidUpdate() {
@@ -26,6 +26,10 @@ export default class Popover extends Component {
     }
 
     this.calPosition();
+  }
+
+  shuoldComponentUpdate(nextProps, nextState) {
+    return nextProps.active;
   }
 
   calPosition() {
@@ -102,7 +106,7 @@ export default class Popover extends Component {
     const { active } = this.props;
 
     return (
-      <div className={`MoEditor__Popover${active ? ' is-active' : ''}`} ref={this.setNode}>
+      <div className={`MoEditorPopover${active ? ' is-active' : ''}`} ref={this.setNode}>
         {this.props.children}
       </div>
     );

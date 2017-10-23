@@ -1,0 +1,17 @@
+@import './theme/default';
+
+.MoEditorToolbar {
+  user-select: none;
+}
+
+.MoEditorToolbar__btn {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 6px;
+}
+
+.MoEditorToolbar__btn--separator {
+  width: 1px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.2);
+}
