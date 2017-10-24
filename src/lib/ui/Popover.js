@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { getSelectionRect, getSelection } from '../utils/selection';
 // import { styleTrans } from '../utils/style';
 
 import './Popover.scss';
@@ -10,8 +9,8 @@ export default class Popover extends Component {
     active: PropTypes.bool,
     direction: PropTypes.string,
     offset: PropTypes.number,
-    editorState: PropTypes.object,
     positionNode: PropTypes.object,
+    getTargetRect: PropTypes.func,
   };
 
   static defaultProps = {
@@ -33,18 +32,13 @@ export default class Popover extends Component {
   }
 
   calPosition() {
-    const { selection, positionNode, direction, offset } = this.props;
+    const { getTargetRect, positionNode, direction, offset } = this.props;
     if (!positionNode) {
       return;
     }
 
-    if (selection.isCollapsed()) {
-      return;
-    }
-
-    const nativeSelection = getSelection(window);
-    const selectionRect = getSelectionRect(nativeSelection);
-    if (!selectionRect) {
+    const targetRect = getTargetRect();
+    if (!targetRect) {
       return;
     }
 
@@ -53,9 +47,9 @@ export default class Popover extends Component {
     const positionClientRect = positionNode.getBoundingClientRect();
 
     // 居中
-    const widthDiff = selectionRect.width - nodeClientRect.width;
+    const widthDiff = targetRect.width - nodeClientRect.width;
 
-    let left = selectionRect.left - positionClientRect.left + widthDiff / 2;
+    let left = targetRect.left - positionClientRect.left + widthDiff / 2;
     // if (widthDiff > 0) {
     //   left = selectionRect.left + widthDiff / 2;
     // } else {
@@ -66,11 +60,11 @@ export default class Popover extends Component {
     let classModifer = 'top';
     const offsetAtTop = () => {
       classModifer = 'top';
-      return selectionRect.top - positionClientRect.top - nodeClientRect.height - offset;
+      return targetRect.top - positionClientRect.top - nodeClientRect.height - offset;
     };
     const offsetAtBottom = () => {
       classModifer = 'bottom';
-      return selectionRect.bottom - positionClientRect.top + offset;
+      return targetRect.bottom - positionClientRect.top + offset;
     };
 
     // 定位

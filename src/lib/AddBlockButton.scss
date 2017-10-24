@@ -1,0 +1,65 @@
+@import './theme/default';
+
+$button-size: 32px;
+
+.MoEditorAddBlockButton {
+  position: absolute;
+  left: -($button-size + 7);
+  top: -5px;
+  z-index: $addBlockButton-zIndex;
+
+  visibility: hidden;
+  pointer-events: none;
+
+  transform: translate3d(0, 0, 0);
+
+  .MoEditorActionBtn {
+    width: $button-size;
+    height: $button-size;
+    border-radius: 100%;
+    border: 1px solid black;
+
+    margin-right: 9px;
+  }
+}
+
+.MoEditorAddBlockButton.is-active {
+  visibility: visible;
+  pointer-events: auto;
+
+  will-change: transform;
+  transition: transform 180ms ease-out;
+}
+
+.MoEditorActionBtn--add {
+  transition: transform 0.2s ease;
+}
+
+.MoEditorActionBtn--add.is-active {
+  transform: rotate(45deg);
+}
+
+.MoEditorAddBlockButton__box {
+  float: right;
+  margin-left: 10px;
+}
+
+.LeftEnter-entering {
+  transform: scale(0);
+  opacity: 0;
+}
+
+.LeftEnter-entered {
+  transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+  transform: scale(1);
+  opacity: 1;
+}
+
+.LeftEnter-exiting {
+  display: none;
+}
+
+// .LeftEnter-exited {
+//   transform: translate3d(-100%, 0px, 0px);
+//   opacity: 0;
+// }

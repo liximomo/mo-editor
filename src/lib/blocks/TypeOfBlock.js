@@ -11,3 +11,4 @@ export const IMAGE = 'IMAGE';
 export const HORIZEN_BREAK = 'HORIZEN_BREAK';
 export const OL = 'OL';
 export const UL = 'UL';
+export const ATOMIC = 'ATOMIC';

@@ -8,9 +8,15 @@ import blockRenderMap from './blocks/blockRenderMap';
 import decorators from './decorators';
 import Popover from './ui/Popover';
 import Toolbar from './Toolbar';
+import AddBlockButton from './AddBlockButton';
 import LinkComposer from './composers/LinkComposer';
 import createBlockComposer from './composers/createBlockComposer';
 import * as BlockType from './blocks/TypeOfBlock';
+import {
+  getSelectionRect as getNativeSelectionRect,
+  getSelection as getNativeSelection,
+} from './utils/selection';
+import * as TypeOfBlock from './blocks/TypeOfBlock';
 
 // eslint-disable-next-line import/first
 import 'draft-js/dist/Draft.css';
@@ -87,10 +93,45 @@ export default class Editor extends Component {
     return this.state.isPopoverActive || hasValidSelection;
   }
 
+  getSelectionRect = () => {
+    const editorState = this.getEditorState();
+    const selection = editorState.getSelection();
+
+    if (selection.isCollapsed()) {
+      return;
+    }
+
+    const nativeSelection = getNativeSelection(window);
+    const selectionRect = getNativeSelectionRect(nativeSelection);
+    return selectionRect;
+  };
+
+  shouldActiveAddBlockButton() {
+    const editorState = this.getEditorState();
+    const selection = editorState.getSelection();
+    const contentState = editorState.getCurrentContent();
+    if (
+      !selection.isCollapsed() ||
+      selection.anchorKey !== selection.focusKey || // 有范围选择
+      contentState
+        .getBlockForKey(selection.getAnchorKey())
+        .getType()
+        .indexOf(TypeOfBlock.ATOMIC) >= 0 // 在原子块内
+    ) {
+      return false;
+    }
+
+    const block = contentState.getBlockForKey(selection.anchorKey);
+    if (block.getLength() > 0) {
+      return false;
+    }
+
+    return true;
+  }
+
   render() {
     const editorState = this.getEditorState();
 
-    const selection = editorState.getSelection();
     return (
       <div className="MoEditor">
         <div className="MoEditor__editorContainer" ref={this.setEditorContainerNode}>
@@ -100,10 +141,14 @@ export default class Editor extends Component {
             onChange={this.handleChange}
             blockRenderMap={blockRenderMap}
           />
+          <AddBlockButton
+            active={this.shouldActiveAddBlockButton()}
+            positionNode={this._editorContainer}
+          />
           <Popover
             active={this.shouldActivePopover()}
             positionNode={this._editorContainer}
-            selection={selection}
+            getTargetRect={this.getSelectionRect}
           >
             <Toolbar
               items={defaultButtons}
@@ -111,6 +156,7 @@ export default class Editor extends Component {
               setEditorState={this.handleChange}
             />
           </Popover>
+          <Popover positionNode={this._editorContainer} />
         </div>
       </div>
     );

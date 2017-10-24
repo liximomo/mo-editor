@@ -7,18 +7,4 @@
   cursor: pointer;
   padding: 0;
   height: 46px;
-
-  color: $toolbar-text-color;
-
-  .MoEditorIcon {
-    fill: $toolbar-text-color;
-  }
-}
-
-.MoEditorActionBtn.is-active {
-  color: $toolbar-text-activeColor;
-
-  .MoEditorIcon {
-    fill: $toolbar-text-activeColor;
-  }
 }

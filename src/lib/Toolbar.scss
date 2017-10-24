@@ -15,3 +15,28 @@
   height: 24px;
   background: rgba(255, 255, 255, 0.2);
 }
+
+.MoEditorToolbar {
+  .MoEditorActionBtn {
+    color: $toolbar-text-color;
+
+    .MoEditorIcon {
+      fill: $toolbar-text-color;
+    }
+  }
+
+  .MoEditorActionBtn {
+    .MoEditorIcon {
+      width: 21px;
+      height: 21px;
+    }
+  }
+
+  .MoEditorActionBtn.is-active {
+    color: $toolbar-text-activeColor;
+
+    .MoEditorIcon {
+      fill: $toolbar-text-activeColor;
+    }
+  }
+}

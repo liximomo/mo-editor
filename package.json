@@ -5,7 +5,9 @@
   "dependencies": {
     "draft-js": "^0.10.3",
     "immutable": "^3.8.2",
-    "prop-types": "^15.6.0"
+    "prop-types": "^15.6.0",
+    "react-click-outside": "^3.0.0",
+    "react-transition-group": "^2.2.1"
   },
   "scripts": {
     "start": "node scripts/start.js",

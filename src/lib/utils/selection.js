@@ -1,11 +1,4 @@
-export const getSelectionRange = (selection) => {
-  if (selection.rangeCount <= 0) {
-    return null;
-  }
-  return selection.getRangeAt(0);
-};
-
-export const getSelectionRect = (selection) => {
+export const getSelectionRect = selection => {
   if (selection.rangeCount <= 0) {
     return null;
   }
@@ -23,7 +16,7 @@ export const getSelectionRect = (selection) => {
   return rect;
 };
 
-export const getSelection = (root) => {
+export const getSelection = root => {
   let t = null;
   if (root.getSelection) {
     t = root.getSelection();
