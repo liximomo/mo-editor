@@ -1,4 +1,4 @@
-@import './theme/default';
+@import '../style/theme/default';
 
 $button-size: 32px;
 
@@ -18,8 +18,29 @@ $button-size: 32px;
     height: $button-size;
     border-radius: 100%;
     border: 1px solid black;
-
     margin-right: 9px;
+  }
+
+  .MoEditorActionBtn:focus {
+    outline: 0;
+  }
+
+  .MoEditorActionBtn .MoEditorIcon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .MoEditorActionBtn--add {
+    transition: transform 0.2s ease;
+  }
+
+  .MoEditorActionBtn--add .MoEditorIcon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .MoEditorActionBtn--add.is-active {
+    transform: rotate(45deg);
   }
 }
 
@@ -31,17 +52,8 @@ $button-size: 32px;
   transition: transform 180ms ease-out;
 }
 
-.MoEditorActionBtn--add {
-  transition: transform 0.2s ease;
-}
-
-.MoEditorActionBtn--add.is-active {
-  transform: rotate(45deg);
-}
-
 .MoEditorAddBlockButton__box {
   float: right;
-  margin-left: 10px;
 }
 
 .LeftEnter-entering {

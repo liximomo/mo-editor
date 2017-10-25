@@ -4,19 +4,22 @@ import React, { Component } from 'react';
 import { Editor as Draft } from 'draft-js';
 
 import createEditorState from './createEditorState';
-import blockRenderMap from './blocks/blockRenderMap';
 import decorators from './decorators';
-import Popover from './ui/Popover';
-import Toolbar from './Toolbar';
-import AddBlockButton from './AddBlockButton';
+import blockRenderMap from './blocks/blockRenderMap';
+import * as BlockType from './blocks/TypeOfBlock';
+
+import Popover from './components/Popover';
+import Toolbar from './components/Toolbar';
+import AddBlockButton from './components/AddBlockButton';
+
 import LinkComposer from './composers/LinkComposer';
 import createBlockComposer from './composers/createBlockComposer';
-import * as BlockType from './blocks/TypeOfBlock';
+import ImageComposer from './composers/ImageComposer';
+
 import {
   getSelectionRect as getNativeSelectionRect,
   getSelection as getNativeSelection,
 } from './utils/selection';
-import * as TypeOfBlock from './blocks/TypeOfBlock';
 
 // eslint-disable-next-line import/first
 import 'draft-js/dist/Draft.css';
@@ -33,6 +36,8 @@ const defaultButtons = [
   LinkComposer,
 ];
 
+const defaultBlockButtons = [ImageComposer];
+
 export default class Editor extends Component {
   static propTypes = {
     buttons: PropTypes.arrayOf(PropTypes.string),
@@ -44,12 +49,28 @@ export default class Editor extends Component {
     offset: 5,
   };
 
+  static childContextTypes = {
+    editor: PropTypes.shape({
+      editorState: PropTypes.object.isRequired,
+      setEditorState: PropTypes.func.isRequired,
+    }),
+  };
+
   constructor(props) {
     super(props);
 
     this.state = {
       isPopoverActive: false,
       editorState: createEditorState(null, null, decorators),
+    };
+  }
+
+  getChildContext() {
+    return {
+      editor: {
+        editorState: this.state.editorState,
+        setEditorState: this.handleChange,
+      },
     };
   }
 
@@ -77,8 +98,11 @@ export default class Editor extends Component {
     return this.state.editorState;
   };
 
-  handleChange = editorState => {
+  handleChange = (editorState, cb) => {
     this.setState({ editorState }, () => {
+      if (cb) {
+        cb(this);
+      }
       this.focus();
     });
   };
@@ -116,7 +140,7 @@ export default class Editor extends Component {
       contentState
         .getBlockForKey(selection.getAnchorKey())
         .getType()
-        .indexOf(TypeOfBlock.ATOMIC) >= 0 // 在原子块内
+        .indexOf(BlockType.ATOMIC) >= 0 // 在原子块内
     ) {
       return false;
     }
@@ -144,17 +168,14 @@ export default class Editor extends Component {
           <AddBlockButton
             active={this.shouldActiveAddBlockButton()}
             positionNode={this._editorContainer}
+            buttons={defaultBlockButtons}
           />
           <Popover
             active={this.shouldActivePopover()}
             positionNode={this._editorContainer}
             getTargetRect={this.getSelectionRect}
           >
-            <Toolbar
-              items={defaultButtons}
-              editorState={editorState}
-              setEditorState={this.handleChange}
-            />
+            <Toolbar editorState={editorState} buttons={defaultButtons} />
           </Popover>
           <Popover positionNode={this._editorContainer} />
         </div>

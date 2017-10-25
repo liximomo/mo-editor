@@ -27,10 +27,6 @@ export default class Popover extends Component {
     this.calPosition();
   }
 
-  shuoldComponentUpdate(nextProps, nextState) {
-    return nextProps.active;
-  }
-
   calPosition() {
     const { getTargetRect, positionNode, direction, offset } = this.props;
     if (!positionNode) {
@@ -101,7 +97,7 @@ export default class Popover extends Component {
 
     return (
       <div className={`MoEditorPopover${active ? ' is-active' : ''}`} ref={this.setNode}>
-        {this.props.children}
+        {active ? this.props.children : null}
       </div>
     );
   }

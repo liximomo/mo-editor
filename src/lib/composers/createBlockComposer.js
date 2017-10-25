@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { RichUtils } from 'draft-js';
+import Control from '../Control';
 import { TOGGLE_BLOCK_TYPE } from '../commands/TypeOfCommand';
 import { execCommand } from '../commands/CommandHub';
 
-import ActionButton from '../ui/ActionButton';
+import Button from '../components/Button';
 import * as BlockType from '../blocks/TypeOfBlock';
 
 class BlockComposer extends Component {
@@ -17,7 +18,7 @@ class BlockComposer extends Component {
     const { icon, type, editorState } = this.props;
     const blockType = RichUtils.getCurrentBlockType(editorState);
 
-    return <ActionButton active={blockType === type} icon={icon} onClick={this.handleClick} />;
+    return <Button active={blockType === type} icon={icon} onClick={this.handleClick} />;
   }
 }
 
@@ -50,8 +51,8 @@ export default function createBlockComposer(blockType) {
   return {
     id: blockType,
     title,
-    render: props => {
-      return <BlockComposer icon={icon} type={blockType} {...props} />;
-    },
+    element: (
+      <Control render={props => <BlockComposer icon={icon} type={blockType} {...props} />} />
+    ),
   };
 }

@@ -1,0 +1,3 @@
+export const CHANGE_BLOCK_TYPE = 'CHANGE_BLOCK_TYPE';
+
+export const REPLACE_BLOCK = 'REPLACE_BLOCK';

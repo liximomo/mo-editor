@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import './ActionButton.scss';
+import './Button.scss';
 
-const ActionButton = props => {
+const Button = props => {
   const { icon, active, modifier, onClick, className, ...rest } = props;
   const clz = [
     className,
@@ -18,15 +18,15 @@ const ActionButton = props => {
   );
 };
 
-ActionButton.prototype = {
+Button.prototype = {
   active: PropTypes.bool,
   icon: PropTypes.node.isRequired,
   onClick: PropTypes.func.isRequired,
   modifier: PropTypes.string,
 };
 
-ActionButton.defaultProps = {
+Button.defaultProps = {
   active: false,
 };
 
-export default ActionButton;
+export default Button;

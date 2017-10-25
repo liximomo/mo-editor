@@ -1,4 +1,4 @@
-@import '../theme/default';
+@import '../style/theme/default';
 
 .MoEditorPopover {
   position: absolute;
@@ -14,7 +14,7 @@
   visibility: hidden;
   display: none;
   pointer-events: none;
-  transform: translate3d(0, 0, 0);
+  // transform: translate3d(0, 0, 0);
 }
 
 .MoEditorPopover.is-active {

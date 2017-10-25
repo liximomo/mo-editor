@@ -1,9 +1,9 @@
 import React from 'react';
-import ActionButton from '../ui/ActionButton';
-import IconLink from '../ui/icons/IconLink';
+import Button from '../components/Button';
+import IconLink from '../components/icons/IconLink';
 
 const LinkComposer = props => {
-  return <ActionButton icon={IconLink} />;
+  return <Button icon={IconLink} />;
 };
 
 export default {

@@ -4,11 +4,11 @@ import React, { Component } from 'react';
 import './Toolbar.scss';
 
 const renderToolBar = props => {
-  const { items, editorState, setEditorState } = props;
+  const { buttons } = props;
 
   return (
     <div className="MoEditorToolbar">
-      {items.map((item, index) => {
+      {buttons.map((item, index) => {
         if (item.id === 'separator') {
           return (
             <div
@@ -20,7 +20,7 @@ const renderToolBar = props => {
 
         return (
           <div className="MoEditorToolbar__btn" key={item.id} title={item.title}>
-            {item.render({ editorState, setEditorState })}
+            {item.element}
           </div>
         );
       })}
@@ -30,12 +30,10 @@ const renderToolBar = props => {
 
 class Toolbar extends Component {
   static propTypes = {
-    setEditorState: PropTypes.func.isRequired,
-    editorState: PropTypes.object.isRequired,
-    items: PropTypes.arrayOf(
+    buttons: PropTypes.arrayOf(
       PropTypes.shape({
         id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-        render: PropTypes.func,
+        element: PropTypes.node,
         title: PropTypes.string,
       })
     ).isRequired,

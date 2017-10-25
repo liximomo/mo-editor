@@ -4,13 +4,13 @@ import enhanceWithClickOutside from 'react-click-outside';
 import TransitionGroup from 'react-transition-group/TransitionGroup';
 import Transition from 'react-transition-group/Transition';
 
-import { styleTrans } from './utils/style';
+import { styleTrans } from '../utils/style';
 import {
   getSelectionRect as getNativeSelectionRect,
   getSelection as getNativeSelection,
-} from './utils/selection';
-import ActionButton from './ui/ActionButton';
-import IconAdd from './ui/icons/IconAdd';
+} from '../utils/selection';
+import Button from './Button';
+import IconAdd from './icons/IconAdd';
 
 import './AddBlockButton.scss';
 
@@ -29,7 +29,6 @@ class AddBlockButton extends Component {
   };
 
   state = {
-    buttons: [1, 3, 4, 5, 6, 7],
     expand: false,
   };
 
@@ -39,10 +38,6 @@ class AddBlockButton extends Component {
     }
 
     this.calPosition();
-  }
-
-  shuoldComponentUpdate(nextProps, nextState) {
-    return nextProps.active;
   }
 
   calPosition() {
@@ -82,29 +77,37 @@ class AddBlockButton extends Component {
   }
 
   render() {
-    const { expand, buttons } = this.state;
-    const { active } = this.props;
+    const { expand } = this.state;
+    const { active, buttons } = this.props;
 
     const timeoutUnit = Math.ceil(totalTime / buttons.length);
 
     return (
       <div className={`MoEditorAddBlockButton${active ? ' is-active' : ''}`} ref={this.setNode}>
-        <ActionButton icon={IconAdd} modifier={'add'} active={expand} onClick={this.toggleExpand} />
-        <TransitionGroup component={ButtonBox}>
-          {expand
-            ? buttons.map((button, index) => (
-                <Transition key={button} timeout={index * timeoutUnit}>
-                  {status => (
-                    <ActionButton
-                      className={`LeftEnter LeftEnter-${status}`}
-                      icon={IconAdd}
-                      onClick={this.toggleExpand}
-                    />
-                  )}
-                </Transition>
-              ))
-            : null}
-        </TransitionGroup>
+        {active
+          ? [
+              <Button
+                key="1"
+                icon={IconAdd}
+                modifier={'add'}
+                active={expand}
+                onClick={this.toggleExpand}
+              />,
+              <TransitionGroup key="2" component={ButtonBox}>
+                {expand
+                  ? buttons.map((button, index) => (
+                      <Transition key={button.id} timeout={index * timeoutUnit}>
+                        {status => (
+                          <div title={button.title} className={`LeftEnter LeftEnter-${status}`}>
+                            {button.element}
+                          </div>
+                        )}
+                      </Transition>
+                    ))
+                  : null}
+              </TransitionGroup>,
+            ]
+          : null}
       </div>
     );
   }
