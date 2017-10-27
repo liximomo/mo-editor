@@ -1,3 +1,4 @@
 export const CHANGE_BLOCK_TYPE = 'CHANGE_BLOCK_TYPE';
 
 export const REPLACE_BLOCK = 'REPLACE_BLOCK';
+export const INSERT_BLOCK = 'INSERT_BLOCK';

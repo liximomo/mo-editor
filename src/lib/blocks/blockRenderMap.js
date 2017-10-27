@@ -1,4 +1,5 @@
 import immutable from 'immutable';
+import { DefaultDraftBlockRenderMap } from 'draft-js';
 import * as BlockType from './TypeOfBlock';
 
 const blockRenderMap = immutable.Map({
@@ -14,10 +15,11 @@ const blockRenderMap = immutable.Map({
   [BlockType.BLOCKQUOTE]: {
     element: 'blockquote',
   },
-  [BlockType.UNSTYLED]: {
-    element: 'div',
-    aliasedElements: ['p', 'section'],
-  },
+  // [BlockType.BREAK]: {
+  //   element: 'hr',
+  // },
 });
 
-export default blockRenderMap;
+const extendedBlockRenderMap = DefaultDraftBlockRenderMap.merge(blockRenderMap);
+
+export default extendedBlockRenderMap;

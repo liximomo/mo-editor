@@ -1,4 +1,5 @@
-import { RichUtils, EditorState } from 'draft-js';
+import { RichUtils, EditorState, ContentState, ContentBlock, genKey } from 'draft-js';
+import { List, Map } from 'immutable';
 import * as BlockType from '../blocks/TypeOfBlock';
 import * as OpType from './TypeOfOperation';
 
@@ -24,19 +25,40 @@ export default function toggleBlockType(editorState, blockType) {
 }
 
 /*
-Adds a new block (currently replaces an empty block) at the current cursor position
-of the given `newType`.
-*/
-export const replaceCurrentBlockIfEmpty = (
+ * 在最后插入一个快
+ */
+export function addNewBlock(editorState, newType = BlockType.UNSTYLED, initialData = {}) {
+  const selectionState = editorState.getSelection();
+
+  const newBlock = new ContentBlock({
+    key: genKey(),
+    type: newType,
+    text: '',
+    characterList: List(),
+    data: Map().merge(getDefaultBlockData(newType, initialData)),
+  });
+
+  const contentState = editorState.getCurrentContent();
+  const newBlockMap = contentState.getBlockMap().set(newBlock.key, newBlock);
+
+  return EditorState.push(
+    editorState,
+    ContentState.createFromBlockArray(newBlockMap.toArray())
+      .set('selectionBefore', selectionState)
+      .set('selectionAfter', selectionState),
+    OpType.INSERT_BLOCK
+  );
+}
+
+/*
+ * 替换选择所在的当前块，被替换的块应该总是空的
+ */
+export const replaceCurrentBlock = (
   editorState,
   newType = BlockType.UNSTYLED,
   initialData = {}
 ) => {
   const selectionState = editorState.getSelection();
-  if (!selectionState.isCollapsed()) {
-    return editorState;
-  }
-
   const contentState = editorState.getCurrentContent();
   const key = selectionState.getStartKey();
   const blockMap = contentState.getBlockMap();
@@ -45,13 +67,6 @@ export const replaceCurrentBlockIfEmpty = (
     return editorState;
   }
 
-  if (currentBlock.getLength() > 0) {
-    return editorState;
-  }
-
-  if (currentBlock.getType() === newType) {
-    return editorState;
-  }
   const newBlock = currentBlock.merge({
     type: newType,
     data: getDefaultBlockData(newType, initialData),

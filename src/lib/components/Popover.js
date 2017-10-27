@@ -10,7 +10,7 @@ export default class Popover extends Component {
     direction: PropTypes.string,
     offset: PropTypes.number,
     positionNode: PropTypes.object,
-    getTargetRect: PropTypes.func,
+    targetRect: PropTypes.object,
   };
 
   static defaultProps = {
@@ -27,14 +27,18 @@ export default class Popover extends Component {
     this.calPosition();
   }
 
+  isTargetRectValid() {
+    const { targetRect } = this.props;
+    return targetRect && targetRect.width > 0;
+  }
+
   calPosition() {
-    const { getTargetRect, positionNode, direction, offset } = this.props;
+    const { targetRect, positionNode, direction, offset } = this.props;
     if (!positionNode) {
       return;
     }
 
-    const targetRect = getTargetRect();
-    if (!targetRect) {
+    if (!this.isTargetRectValid()) {
       return;
     }
 
@@ -95,6 +99,7 @@ export default class Popover extends Component {
   render() {
     const { active } = this.props;
 
+    // const shouldShow = this.isTargetRectValid() && active;
     return (
       <div className={`MoEditorPopover${active ? ' is-active' : ''}`} ref={this.setNode}>
         {active ? this.props.children : null}

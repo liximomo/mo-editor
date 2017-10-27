@@ -4,7 +4,7 @@ $button-size: 32px;
 
 .MoEditorAddBlockButton {
   position: absolute;
-  left: -($button-size + 7);
+  left: -($button-size + 20);
   top: -5px;
   z-index: $addBlockButton-zIndex;
 
@@ -31,6 +31,7 @@ $button-size: 32px;
   }
 
   .MoEditorActionBtn--add {
+    margin-right: 0;
     transition: transform 0.2s ease;
   }
 
@@ -53,7 +54,12 @@ $button-size: 32px;
 }
 
 .MoEditorAddBlockButton__box {
+  margin-left: 16px;
   float: right;
+}
+
+.MoEditorActionWrapper {
+  float: left;
 }
 
 .LeftEnter-entering {

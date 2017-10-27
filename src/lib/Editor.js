@@ -1,11 +1,16 @@
 import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
-import { Editor as Draft } from 'draft-js';
+import { Editor as Draft, RichUtils } from 'draft-js';
+import isSoftNewlineEvent from 'draft-js/lib/isSoftNewlineEvent';
+import { HANDLED, NOT_HANDLED } from './DraftConstants';
+
+import { getCurrentBlock } from './operation/BLock';
 
 import createEditorState from './createEditorState';
 import decorators from './decorators';
 import blockRenderMap from './blocks/blockRenderMap';
+import blockRendererFn from './blocks/blockRendererFn';
 import * as BlockType from './blocks/TypeOfBlock';
 
 import Popover from './components/Popover';
@@ -15,6 +20,7 @@ import AddBlockButton from './components/AddBlockButton';
 import LinkComposer from './composers/LinkComposer';
 import createBlockComposer from './composers/createBlockComposer';
 import ImageComposer from './composers/ImageComposer';
+import BreakComposer from './composers/BreakComposer';
 
 import {
   getSelectionRect as getNativeSelectionRect,
@@ -36,7 +42,7 @@ const defaultButtons = [
   LinkComposer,
 ];
 
-const defaultBlockButtons = [ImageComposer];
+const defaultBlockButtons = [ImageComposer, BreakComposer];
 
 export default class Editor extends Component {
   static propTypes = {
@@ -90,13 +96,65 @@ export default class Editor extends Component {
     return this._editor;
   };
 
+  getEditorState = () => {
+    return this.state.editorState;
+  };
+
   focus = () => {
     return this.getEditor().focus();
   };
 
-  getEditorState = () => {
-    return this.state.editorState;
-  };
+  /**
+   * 
+   * 处理回车，主要是覆盖定制的 renderer 中回车行为
+   * @param {Event} event 
+   * @returns 
+   * @memberof Editor
+   */
+  handleReturn(event) {
+    console.log('enter handle');
+    const editorState = this.getEditorState;
+    if (isSoftNewlineEvent(event)) {
+      this.onChange(RichUtils.insertSoftNewline(editorState));
+      return HANDLED;
+    }
+
+    if (event.altKey || event.metaKey || event.ctrlKey) {
+      return NOT_HANDLED;
+    }
+
+    // const currentBlock = getCurrentBlock(editorState);
+    // const blockType = currentBlock.getType();
+
+    // if (currentBlock.getLength() === 0) {
+    //   switch (blockType) {
+    //     case Block.UL:
+    //     case Block.OL:
+    //     case Block.BLOCKQUOTE:
+    //     case Block.BLOCKQUOTE_CAPTION:
+    //     case Block.CAPTION:
+    //     case Block.TODO:
+    //     case Block.H2:
+    //     case Block.H3:
+    //     case Block.H1:
+    //       this.onChange(resetBlockWithType(editorState, Block.UNSTYLED));
+    //       return HANDLED;
+    //     default:
+    //       return NOT_HANDLED;
+    //   }
+    // }
+
+    // const selection = editorState.getSelection();
+
+    // if (selection.isCollapsed() && currentBlock.getLength() === selection.getStartOffset()) {
+    //   if (this.props.continuousBlocks.indexOf(blockType) < 0) {
+    //     this.onChange(addNewBlockAt(editorState, currentBlock.getKey()));
+    //     return HANDLED;
+    //   }
+    //   return NOT_HANDLED;
+    // }
+    // return NOT_HANDLED;
+  }
 
   handleChange = (editorState, cb) => {
     this.setState({ editorState }, () => {
@@ -146,6 +204,7 @@ export default class Editor extends Component {
     }
 
     const block = contentState.getBlockForKey(selection.anchorKey);
+
     if (block.getLength() > 0) {
       return false;
     }
@@ -164,16 +223,19 @@ export default class Editor extends Component {
             editorState={this.state.editorState}
             onChange={this.handleChange}
             blockRenderMap={blockRenderMap}
+            blockRendererFn={blockRendererFn}
+            handleReturn={this.handleReturn}
           />
           <AddBlockButton
             active={this.shouldActiveAddBlockButton()}
+            editorState={editorState} /* 正确响应编辑器状态更新 */
             positionNode={this._editorContainer}
             buttons={defaultBlockButtons}
           />
           <Popover
             active={this.shouldActivePopover()}
             positionNode={this._editorContainer}
-            getTargetRect={this.getSelectionRect}
+            targetRect={this.getSelectionRect()}
           >
             <Toolbar editorState={editorState} buttons={defaultButtons} />
           </Popover>

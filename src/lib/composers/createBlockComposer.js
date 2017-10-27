@@ -38,10 +38,6 @@ export default function createBlockComposer(blockType) {
       icon = '引用';
       title = '引用';
       break;
-    case BlockType.HORIZEN_BREAK:
-      icon = '段落分割符';
-      title = '段落分割符';
-      break;
     default:
       icon = 'PLAIN';
       title = '';

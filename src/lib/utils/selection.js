@@ -8,7 +8,6 @@ export const getSelectionRect = selection => {
   if (!rect) {
     if (selection.anchorNode && selection.anchorNode.getBoundingClientRect) {
       rect = selection.anchorNode.getBoundingClientRect();
-      rect.isEmptyline = true;
     } else {
       return null;
     }

@@ -98,7 +98,10 @@ class AddBlockButton extends Component {
                   ? buttons.map((button, index) => (
                       <Transition key={button.id} timeout={index * timeoutUnit}>
                         {status => (
-                          <div title={button.title} className={`LeftEnter LeftEnter-${status}`}>
+                          <div
+                            title={button.title}
+                            className={`MoEditorActionWrapper LeftEnter LeftEnter-${status}`}
+                          >
                             {button.element}
                           </div>
                         )}

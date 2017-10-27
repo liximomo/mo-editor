@@ -29,21 +29,21 @@ class BlockImage extends React.Component {
   //   setEditorState(EditorState.forceSelection(editorState, newSelection));
   // };
 
+  handleKeyDown(event) {
+    console.log('keydown in imge');
+  }
+
   render() {
     const { block } = this.props;
     const data = block.getData();
     const src = data.get('src');
     if (src !== null) {
-      return (
-        <figure>
-          <div className="block-image-inner-container" onClick={this.focusBlock}>
-            <img role="presentation" src={src} />
-          </div>
-          <figcaption>
-            <EditorBlock {...this.props} />
-          </figcaption>
-        </figure>
-      );
+      return [
+        <img key="img" role="presentation" src={src} />,
+        <figcaption key="figcaption" onKeyDown={this.handleKeyDown}>
+          <EditorBlock {...this.props} />
+        </figcaption>,
+      ];
     }
     return <EditorBlock {...this.props} />;
   }

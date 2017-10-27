@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import ServiceHub from '../services/ServiceHub';
 import Control from '../Control';
 import Button from '../components/Button';
 import IconImage from '../components/icons/IconImage';
-import { replaceCurrentBlockIfEmpty } from '../operation/BLock';
+import { replaceCurrentBlock } from '../operation/BLock';
 import { IMAGE } from '../blocks/TypeOfBlock';
 
 class ImageComposer extends Component {
@@ -21,12 +22,14 @@ class ImageComposer extends Component {
 
     const { editorState, setEditorState } = this.props;
 
-    const src = URL.createObjectURL(file);
-    setEditorState(
-      replaceCurrentBlockIfEmpty(editorState, IMAGE, {
-        src,
-      })
-    );
+    ServiceHub.uploadImage(file).then(img => {
+      const { url } = img;
+      setEditorState(
+        replaceCurrentBlock(editorState, IMAGE, {
+          src: url,
+        })
+      );
+    });
   };
 
   setInputNode = node => {
@@ -49,7 +52,7 @@ class ImageComposer extends Component {
 }
 
 export default {
-  id: 'img',
+  id: IMAGE,
   title: '插入图片',
   element: <Control component={ImageComposer} />,
 };
