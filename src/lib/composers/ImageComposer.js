@@ -3,7 +3,7 @@ import ServiceHub from '../services/ServiceHub';
 import Control from '../Control';
 import Button from '../components/Button';
 import IconImage from '../components/icons/IconImage';
-import { replaceCurrentBlock } from '../operation/BLock';
+import { replaceCurrentBlock } from '../operation/Block';
 import { IMAGE } from '../blocks/TypeOfBlock';
 
 class ImageComposer extends Component {

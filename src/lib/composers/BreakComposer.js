@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Control from '../Control';
 import Button from '../components/Button';
 import IconImage from '../components/icons/IconImage';
-import { replaceCurrentBlock } from '../operation/BLock';
+import { replaceCurrentBlock } from '../operation/Block';
 import { BREAK } from '../blocks/TypeOfBlock';
 
 class BreakComposer extends Component {

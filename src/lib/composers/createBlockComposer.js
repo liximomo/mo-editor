@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { RichUtils } from 'draft-js';
 import Control from '../Control';
-import { TOGGLE_BLOCK_TYPE } from '../commands/TypeOfCommand';
-import { execCommand } from '../commands/CommandHub';
+import IconQuote from '../components/icons/IconQuote';
+import { toggleBlockType, getCurrentBlockType } from '../operation/Block';
 
 import Button from '../components/Button';
 import * as BlockType from '../blocks/TypeOfBlock';
@@ -10,13 +9,13 @@ import * as BlockType from '../blocks/TypeOfBlock';
 class BlockComposer extends Component {
   handleClick = () => {
     const { editorState, setEditorState } = this.props;
-    const nextState = execCommand(TOGGLE_BLOCK_TYPE, editorState, this.props.type);
+    const nextState = toggleBlockType(editorState, this.props.type);
     setEditorState(nextState);
   };
 
   render() {
     const { icon, type, editorState } = this.props;
-    const blockType = RichUtils.getCurrentBlockType(editorState);
+    const blockType = getCurrentBlockType(editorState);
 
     return <Button active={blockType === type} icon={icon} onClick={this.handleClick} />;
   }
@@ -35,12 +34,10 @@ export default function createBlockComposer(blockType) {
       title = '子标题';
       break;
     case BlockType.BLOCKQUOTE:
-      icon = '引用';
+      icon = IconQuote;
       title = '引用';
       break;
     default:
-      icon = 'PLAIN';
-      title = '';
       break;
   }
 

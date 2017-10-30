@@ -3,7 +3,7 @@ import React from 'react';
 
 import { EditorBlock, EditorState, SelectionState } from 'draft-js';
 
-import { getCurrentBlock } from '../operation/BLock';
+import { getCurrentBlock } from '../operation/Block';
 
 class BlockImage extends React.Component {
   static propTypes = {

@@ -10,7 +10,7 @@ export default class Popover extends Component {
     direction: PropTypes.string,
     offset: PropTypes.number,
     positionNode: PropTypes.object,
-    targetRect: PropTypes.object,
+    getTargetRect: PropTypes.func,
   };
 
   static defaultProps = {
@@ -27,21 +27,22 @@ export default class Popover extends Component {
     this.calPosition();
   }
 
-  isTargetRectValid() {
-    const { targetRect } = this.props;
+  isTargetRectValid(targetRect) {
     return targetRect && targetRect.width > 0;
   }
 
   calPosition() {
-    const { targetRect, positionNode, direction, offset } = this.props;
+    const { getTargetRect, positionNode, direction, offset } = this.props;
     if (!positionNode) {
       return;
     }
 
-    if (!this.isTargetRectValid()) {
+    const targetRect = getTargetRect();
+    if (!this.isTargetRectValid(targetRect)) {
       return;
     }
 
+    console.log(targetRect);
     const node = this._node;
     const nodeClientRect = node.getBoundingClientRect();
     const positionClientRect = positionNode.getBoundingClientRect();
@@ -76,11 +77,11 @@ export default class Popover extends Component {
     }
 
     // 限定在 positionClientRect 内
-    if (top < nodeClientRect.height) {
+    if (top < positionClientRect.top) {
       top = offsetAtBottom();
     }
 
-    // 没有使用 else 确保在两边都超界的时候选择停靠在顶部
+    // 确保在两边都超界的时候选择停靠在顶部
     if (top > positionClientRect.height - nodeClientRect.height) {
       top = offsetAtTop();
     }
@@ -99,7 +100,6 @@ export default class Popover extends Component {
   render() {
     const { active } = this.props;
 
-    // const shouldShow = this.isTargetRectValid() && active;
     return (
       <div className={`MoEditorPopover${active ? ' is-active' : ''}`} ref={this.setNode}>
         {active ? this.props.children : null}

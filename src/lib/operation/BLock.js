@@ -6,21 +6,22 @@ import * as OpType from './TypeOfOperation';
 /*
 Returns default block-level metadata for various block type. Empty object otherwise.
 */
-export const getDefaultBlockData = (blockType, initialData = {}) => {
+export function getDefaultBlockData(blockType, initialData = {}) {
   return initialData;
-};
+}
 
-/*
-Get currentBlock in the editorState.
-*/
-export const getCurrentBlock = editorState => {
+export function getCurrentBlock(editorState) {
   const selectionState = editorState.getSelection();
   const contentState = editorState.getCurrentContent();
   const block = contentState.getBlockForKey(selectionState.getStartKey());
   return block;
-};
+}
 
-export default function toggleBlockType(editorState, blockType) {
+export function getCurrentBlockType(editorState) {
+  return RichUtils.getCurrentBlockType(editorState);
+}
+
+export function toggleBlockType(editorState, blockType) {
   return RichUtils.toggleBlockType(editorState, blockType);
 }
 
@@ -53,11 +54,7 @@ export function addNewBlock(editorState, newType = BlockType.UNSTYLED, initialDa
 /*
  * 替换选择所在的当前块，被替换的块应该总是空的
  */
-export const replaceCurrentBlock = (
-  editorState,
-  newType = BlockType.UNSTYLED,
-  initialData = {}
-) => {
+export function replaceCurrentBlock(editorState, newType = BlockType.UNSTYLED, initialData = {}) {
   const selectionState = editorState.getSelection();
   const contentState = editorState.getCurrentContent();
   const key = selectionState.getStartKey();
@@ -76,4 +73,4 @@ export const replaceCurrentBlock = (
     selectionAfter: selectionState,
   });
   return EditorState.push(editorState, newContentState, OpType.REPLACE_BLOCK);
-};
+}

@@ -5,13 +5,14 @@ import { Editor as Draft, RichUtils } from 'draft-js';
 import isSoftNewlineEvent from 'draft-js/lib/isSoftNewlineEvent';
 import { HANDLED, NOT_HANDLED } from './DraftConstants';
 
-import { getCurrentBlock } from './operation/BLock';
+import { getCurrentBlock } from './operation/Block';
 
 import createEditorState from './createEditorState';
 import decorators from './decorators';
 import blockRenderMap from './blocks/blockRenderMap';
 import blockRendererFn from './blocks/blockRendererFn';
 import * as BlockType from './blocks/TypeOfBlock';
+import * as InlineStyle from './inline-styles/TypeOfInlineStyles';
 
 import Popover from './components/Popover';
 import Toolbar from './components/Toolbar';
@@ -19,6 +20,7 @@ import AddBlockButton from './components/AddBlockButton';
 
 import LinkComposer from './composers/LinkComposer';
 import createBlockComposer from './composers/createBlockComposer';
+import createInlineComposer from './composers/createInlineComposer';
 import ImageComposer from './composers/ImageComposer';
 import BreakComposer from './composers/BreakComposer';
 
@@ -39,6 +41,9 @@ const defaultButtons = [
   {
     id: 'separator',
   },
+  createInlineComposer(InlineStyle.BOLD),
+  createInlineComposer(InlineStyle.ITALIC),
+  createInlineComposer(InlineStyle.UNDERLINE),
   LinkComposer,
 ];
 
@@ -235,11 +240,10 @@ export default class Editor extends Component {
           <Popover
             active={this.shouldActivePopover()}
             positionNode={this._editorContainer}
-            targetRect={this.getSelectionRect()}
+            getTargetRect={this.getSelectionRect}
           >
             <Toolbar editorState={editorState} buttons={defaultButtons} />
           </Popover>
-          <Popover positionNode={this._editorContainer} />
         </div>
       </div>
     );

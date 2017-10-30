@@ -1,4 +1,5 @@
 import React from 'react';
+import Control from '../Control';
 import Button from '../components/Button';
 import IconLink from '../components/icons/IconLink';
 
@@ -9,5 +10,5 @@ const LinkComposer = props => {
 export default {
   id: 'link',
   title: '链接',
-  render: () => <LinkComposer />,
+  element: <Control component={LinkComposer} />,
 };
