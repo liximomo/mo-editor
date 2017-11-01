@@ -61,10 +61,9 @@ export default class Editor extends Component {
   };
 
   static childContextTypes = {
-    editor: PropTypes.shape({
-      editorState: PropTypes.object.isRequired,
-      setEditorState: PropTypes.func.isRequired,
-    }),
+    editorState: PropTypes.object.isRequired,
+    setEditorState: PropTypes.func.isRequired,
+    getEditor: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -78,10 +77,9 @@ export default class Editor extends Component {
 
   getChildContext() {
     return {
-      editor: {
-        editorState: this.state.editorState,
-        setEditorState: this.handleChange,
-      },
+      editorState: this.state.editorState,
+      setEditorState: this.handleChange,
+      getEditor: this.getEditor,
     };
   }
 
@@ -224,12 +222,12 @@ export default class Editor extends Component {
       <div className="MoEditor">
         <div className="MoEditor__editorContainer" ref={this.setEditorContainerNode}>
           <Draft
+            {...this.props}
             ref={this.setEditorInstance}
             editorState={this.state.editorState}
             onChange={this.handleChange}
             blockRenderMap={blockRenderMap}
             blockRendererFn={blockRendererFn}
-            handleReturn={this.handleReturn}
           />
           <AddBlockButton
             active={this.shouldActiveAddBlockButton()}

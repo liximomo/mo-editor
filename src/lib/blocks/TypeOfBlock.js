@@ -13,4 +13,6 @@ export const IMAGE = 'IMAGE';
 export const BREAK = 'BREAK';
 export const OL = 'OL';
 export const UL = 'UL';
-export const ATOMIC = 'ATOMIC';
+
+export const ATOMIC = 'atomic';
+export const ATOMIC_BREAK = 'ATOMIC_BREAK';

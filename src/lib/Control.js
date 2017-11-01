@@ -8,16 +8,15 @@ class Control extends Component {
   };
 
   static contextTypes = {
-    editor: PropTypes.shape({
-      editorState: PropTypes.object.isRequired,
-      setEditorState: PropTypes.func.isRequired,
-    }),
+    editorState: PropTypes.object.isRequired,
+    setEditorState: PropTypes.func.isRequired,
+    getEditor: PropTypes.func.isRequired,
   };
 
   render() {
     const { component, render } = this.props;
-    const { editorState, setEditorState } = this.context.editor;
-    const props = { editorState, setEditorState };
+    const { editorState, setEditorState, getEditor } = this.context;
+    const props = { editorState, setEditorState, getEditor };
 
     if (component) return React.createElement(component, props);
 

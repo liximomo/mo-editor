@@ -1,5 +1,5 @@
 import BlockImage from './BlockImage';
-import BlockBreak from './BlockBreak';
+import BlockAtomic from './BlockAtomic';
 
 import * as BlockType from './TypeOfBlock';
 
@@ -11,9 +11,10 @@ export default contentBlock => {
       return {
         component: BlockImage,
       };
-    case BlockType.BREAK:
+    case BlockType.ATOMIC:
       return {
-        component: BlockBreak,
+        component: BlockAtomic,
+        editable: false,
       };
     default:
       return null;

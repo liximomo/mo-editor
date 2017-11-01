@@ -1,23 +1,23 @@
 import React, { Component } from 'react';
 import Control from '../Control';
 import Button from '../components/Button';
-import IconImage from '../components/icons/IconImage';
-import { replaceCurrentBlock } from '../operation/Block';
-import { BREAK } from '../blocks/TypeOfBlock';
+import IconBreak from '../components/icons/IconBreak';
+import { removeCurrentAndInsertNewBlock } from '../operation/Block';
+import { ATOMIC, ATOMIC_BREAK } from '../blocks/TypeOfBlock';
 
 class BreakComposer extends Component {
   handleButtonClick = () => {
     const { editorState, setEditorState } = this.props;
-    setEditorState(replaceCurrentBlock(editorState, BREAK));
+    setEditorState(removeCurrentAndInsertNewBlock(editorState, ATOMIC, { type: ATOMIC_BREAK }));
   };
 
   render() {
-    return <Button key="btn" icon={IconImage} onClick={this.handleButtonClick} />;
+    return <Button key="btn" icon={IconBreak} onClick={this.handleButtonClick} />;
   }
 }
 
 export default {
-  id: BREAK,
+  id: ATOMIC_BREAK,
   title: '插入分隔符',
   element: <Control component={BreakComposer} />,
 };
