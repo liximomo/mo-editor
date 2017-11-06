@@ -6,12 +6,29 @@ import {
   Modifier,
   BlockMapBuilder,
   CharacterMetadata,
+  AtomicBlockUtils,
 } from 'draft-js';
 import { List, Repeat, Map } from 'immutable';
 import * as BlockType from '../blocks/TypeOfBlock';
 import * as OpType from './TypeOfOperation';
 
-const AtomicPlaceHolderChar = '-';
+export function createBlock(
+  { type = BlockType.UNSTYLED, entityKey, character = '', data = {} } = {}
+) {
+  const constructParams = {
+    type,
+    text: character,
+    key: genKey(),
+    data: Map(data),
+  };
+
+  if (entityKey) {
+    const charData = CharacterMetadata.create({ entity: entityKey });
+    constructParams.characterList = List(Repeat(charData, character.length));
+  }
+
+  return new ContentBlock(constructParams);
+}
 
 /*
 Returns default block-level metadata for various block type. Empty object otherwise.
@@ -61,7 +78,7 @@ export function toggleBlockType(editorState, blockType) {
 //   );
 // }
 
-export function insertNewBlock(editorState, newType = BlockType.UNSTYLED, initialData = {}) {
+export function insertNewBlock(editorState, block) {
   const contentState = editorState.getCurrentContent();
   const selectionState = editorState.getSelection();
 
@@ -73,21 +90,7 @@ export function insertNewBlock(editorState, newType = BlockType.UNSTYLED, initia
 
   const asAtomicBlock = Modifier.setBlockType(afterSplit, insertionTarget, BlockType.ATOMIC);
 
-  const fragmentArray = [
-    new ContentBlock({
-      key: genKey(),
-      type: newType,
-      text: '',
-      characterList: List(),
-      data: Map().merge(getDefaultBlockData(newType, initialData)),
-    }),
-    new ContentBlock({
-      key: genKey(),
-      type: BlockType.UNSTYLED,
-      text: '',
-      characterList: List(),
-    }),
-  ];
+  const fragmentArray = [block, createBlock()];
 
   const fragment = BlockMapBuilder.createFromArray(fragmentArray);
 
@@ -101,11 +104,10 @@ export function insertNewBlock(editorState, newType = BlockType.UNSTYLED, initia
   return EditorState.push(editorState, newContent, OpType.INSERT_BLOCK);
 }
 
-export function removeCurrentAndInsertNewBlock(
-  editorState,
-  newType = BlockType.UNSTYLED,
-  initialData = {}
-) {
+/*
+ * 替换选择所在的当前块，被替换的块应该总是空的
+ */
+export function removeCurrentAndInsertNewBlock(editorState, block) {
   const contentState = editorState.getCurrentContent();
   const selectionState = editorState.getSelection();
 
@@ -115,21 +117,7 @@ export function removeCurrentAndInsertNewBlock(
 
   const asAtomicBlock = Modifier.setBlockType(afterRemoval, targetSelection, BlockType.ATOMIC);
 
-  const fragmentArray = [
-    new ContentBlock({
-      key: genKey(),
-      type: newType,
-      text: '',
-      characterList: List(),
-      data: Map().merge(getDefaultBlockData(newType, initialData)),
-    }),
-    new ContentBlock({
-      key: genKey(),
-      type: BlockType.UNSTYLED,
-      text: '',
-      characterList: List(),
-    }),
-  ];
+  const fragmentArray = [block, createBlock()];
 
   const fragment = BlockMapBuilder.createFromArray(fragmentArray);
 
@@ -143,10 +131,7 @@ export function removeCurrentAndInsertNewBlock(
   return EditorState.push(editorState, newContent, OpType.INSERT_BLOCK);
 }
 
-/*
- * 替换选择所在的当前块，被替换的块应该总是空的
- */
-export function replaceCurrentBlock(editorState, newType = BlockType.UNSTYLED, initialData = {}) {
+export function replaceCurrentBlock(editorState, newType = BlockType.UNSTYLED, newBlock) {
   const selectionState = editorState.getSelection();
   const contentState = editorState.getCurrentContent();
   const key = selectionState.getStartKey();
@@ -156,13 +141,13 @@ export function replaceCurrentBlock(editorState, newType = BlockType.UNSTYLED, i
     return editorState;
   }
 
-  const newBlock = currentBlock.merge({
-    type: newType,
-    data: getDefaultBlockData(newType, initialData),
-  });
   const newContentState = contentState.merge({
     blockMap: blockMap.set(key, newBlock),
     selectionAfter: selectionState,
   });
   return EditorState.push(editorState, newContentState, OpType.INSERT_BLOCK);
+}
+
+export function insertAtomicBlock(editorState, entityKey, character) {
+  return AtomicBlockUtils.insertAtomicBlock(editorState, entityKey, character);
 }

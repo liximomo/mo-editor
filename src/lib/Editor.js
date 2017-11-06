@@ -10,7 +10,7 @@ import { getCurrentBlock } from './operation/Block';
 import createEditorState from './createEditorState';
 import decorators from './decorators';
 import blockRenderMap from './blocks/blockRenderMap';
-import blockRendererFn from './blocks/blockRendererFn';
+import BlockHub from './blocks/BlockHub';
 import * as BlockType from './blocks/TypeOfBlock';
 import * as InlineStyle from './inline-styles/TypeOfInlineStyles';
 
@@ -69,6 +69,7 @@ export default class Editor extends Component {
   constructor(props) {
     super(props);
 
+    this.blockRendererFn = BlockHub.getBlockRendererFn();
     this.state = {
       isPopoverActive: false,
       editorState: createEditorState(null, null, decorators),
@@ -227,7 +228,7 @@ export default class Editor extends Component {
             editorState={this.state.editorState}
             onChange={this.handleChange}
             blockRenderMap={blockRenderMap}
-            blockRendererFn={blockRendererFn}
+            blockRendererFn={this.blockRendererFn}
           />
           <AddBlockButton
             active={this.shouldActiveAddBlockButton()}

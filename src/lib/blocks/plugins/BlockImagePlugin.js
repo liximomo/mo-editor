@@ -3,7 +3,8 @@ import React from 'react';
 
 import { EditorBlock, EditorState, SelectionState } from 'draft-js';
 
-import { getCurrentBlock } from '../operation/Block';
+import { IMAGE } from '../TypeOfBlock';
+import { getCurrentBlock } from '../../operation/Block';
 
 class BlockImage extends React.Component {
   static propTypes = {
@@ -49,4 +50,7 @@ class BlockImage extends React.Component {
   }
 }
 
-export default BlockImage;
+export default {
+  type: IMAGE,
+  component: BlockImage,
+};

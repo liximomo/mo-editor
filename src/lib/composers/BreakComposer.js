@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import Control from '../Control';
 import Button from '../components/Button';
 import IconBreak from '../components/icons/IconBreak';
-import { removeCurrentAndInsertNewBlock } from '../operation/Block';
-import { ATOMIC, ATOMIC_BREAK } from '../blocks/TypeOfBlock';
+import { insertAtomicBlock, removeCurrentAndInsertNewBlock } from '../operation/Block';
+import AtomicBlockBreakPlugin from '../blocks/plugins/AtomicBlockBreakPlugin';
 
 class BreakComposer extends Component {
   handleButtonClick = () => {
     const { editorState, setEditorState } = this.props;
-    setEditorState(removeCurrentAndInsertNewBlock(editorState, ATOMIC, { type: ATOMIC_BREAK }));
+    setEditorState(
+      removeCurrentAndInsertNewBlock(editorState, AtomicBlockBreakPlugin.createBlock())
+    );
   };
 
   render() {
@@ -17,7 +19,7 @@ class BreakComposer extends Component {
 }
 
 export default {
-  id: ATOMIC_BREAK,
+  id: AtomicBlockBreakPlugin.type,
   title: '插入分隔符',
   element: <Control component={BreakComposer} />,
 };
