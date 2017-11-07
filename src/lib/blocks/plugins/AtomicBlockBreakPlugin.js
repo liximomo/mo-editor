@@ -6,16 +6,12 @@ function BlockBreak() {
   return <hr />;
 }
 
-function dataCreator() {
-  return {};
-}
-
 export default {
   type: TYPE,
   renderer: {
     component: BlockBreak,
   },
-  dataCreator,
+  // dataCreator,
   // inject later
-  createBlock: null,
+  createEntity: null,
 };

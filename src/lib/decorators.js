@@ -1,6 +1,4 @@
 import { CompositeDecorator } from 'draft-js';
-import LinkDecorator from './cells/LinkDecorator';
+import DecoratorLink from './decorators/DecoratorLink';
 
-export default new CompositeDecorator([
-  LinkDecorator,
-]);
+export default new CompositeDecorator([DecoratorLink]);

@@ -1,11 +1,12 @@
 import React from 'react';
 import { ATOMIC } from '../TypeOfBlock';
-import { createBlock } from '../../operation/Block';
+import createEntityCreator from '../../entities/createEntityCreator';
 
 const AtomicBlockPlugins = {};
 
 const defaultPluginProps = {
   editable: true,
+  dataCreator: a => a,
 };
 
 function atomicRendererFn(type) {
@@ -16,29 +17,28 @@ function atomicRendererFn(type) {
   }
 }
 
-function createBlockCreator(type, dataCreator) {
-  return (...args) => {
-    const withTypeData = {
-      ...dataCreator(...args),
-      $$AtomicType: type,
-    };
+function injectCreateEntity(plugin) {
+  const { type, dataCreator } = plugin;
+  const entityCreator = createEntityCreator({
+    type: type,
+    mutatble: 'IMMUTABLE',
+  });
 
-    return createBlock({ type: ATOMIC, data: withTypeData });
-  };
+  plugin.createEntity = (editorState, ...rest) => entityCreator(editorState, dataCreator(...rest));
 }
 
 export function injectAtomicBlockPlugin(plugin) {
-  plugin.createBlock = createBlockCreator(plugin.type, plugin.dataCreator);
-  AtomicBlockPlugins[plugin.type] = {
-    ...defaultPluginProps,
-    ...plugin,
-  };
+  Object.assign(plugin, defaultPluginProps, plugin);
+  injectCreateEntity(plugin);
+  AtomicBlockPlugins[plugin.type] = plugin;
 }
 
 function BlockAtomic(props) {
-  const { block } = props;
-  const data = block.getData();
-  const type = data.get('$$AtomicType');
+  const { block, contentState } = props;
+
+  const entity = contentState.getEntity(block.getEntityAt(0));
+  const data = entity.getData();
+  const type = entity.getType();
   const renderer = atomicRendererFn(type);
   if (renderer && renderer.component) {
     const Comp = renderer.component;

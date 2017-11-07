@@ -42,7 +42,6 @@ export default class Popover extends Component {
       return;
     }
 
-    console.log(targetRect);
     const node = this._node;
     const nodeClientRect = node.getBoundingClientRect();
     const positionClientRect = positionNode.getBoundingClientRect();
@@ -76,15 +75,11 @@ export default class Popover extends Component {
       top = offsetAtBottom();
     }
 
-    // 限定在 positionClientRect 内
-    if (top < positionClientRect.top) {
-      top = offsetAtBottom();
-    }
-
-    // 确保在两边都超界的时候选择停靠在顶部
-    if (top > positionClientRect.height - nodeClientRect.height) {
-      top = offsetAtTop();
-    }
+    // // 限定在 positionClientRect 内
+    // console.log(top, positionClientRect.top);
+    // if (top < positionClientRect.top) {
+    //   top = offsetAtBottom();
+    // }
 
     // node.style[styleTrans.transformProp] = `translate3d(${left}px, ${top}px, 0)`;
     node.style.left = `${left}px`;

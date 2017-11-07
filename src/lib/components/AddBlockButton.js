@@ -4,13 +4,15 @@ import enhanceWithClickOutside from 'react-click-outside';
 import TransitionGroup from 'react-transition-group/TransitionGroup';
 import Transition from 'react-transition-group/Transition';
 
+import Button from './Button';
+import IconAdd from './icons/IconAdd';
+
+import * as BlockType from '../blocks/TypeOfBlock';
 import { styleTrans } from '../utils/style';
 import {
   getSelectionRect as getNativeSelectionRect,
   getSelection as getNativeSelection,
 } from '../utils/selection';
-import Button from './Button';
-import IconAdd from './icons/IconAdd';
 
 import './AddBlockButton.scss';
 
@@ -18,22 +20,49 @@ const totalTime = 200;
 
 const ButtonBox = ({ children }) => <div className="MoEditorAddBlockButton__box">{children}</div>;
 
+function isEmptyLine(editorState) {
+  const selection = editorState.getSelection();
+  const contentState = editorState.getCurrentContent();
+  if (
+    !selection.isCollapsed() ||
+    selection.anchorKey !== selection.focusKey || // 有范围选择
+    contentState
+      .getBlockForKey(selection.getAnchorKey())
+      .getType()
+      .indexOf(BlockType.ATOMIC) >= 0 // 在原子块内
+  ) {
+    return false;
+  }
+
+  const block = contentState.getBlockForKey(selection.anchorKey);
+
+  if (block.getLength() > 0) {
+    return false;
+  }
+
+  return true;
+}
+
 class AddBlockButton extends Component {
   static propTypes = {
-    active: PropTypes.bool,
     positionNode: PropTypes.object,
-  };
-
-  static defaultProps = {
-    active: false,
   };
 
   state = {
     expand: false,
   };
 
+  constructor(props) {
+    super(props);
+    this.active = isEmptyLine(props.editorState);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.active = isEmptyLine(nextProps.editorState);
+  }
+
   componentDidUpdate() {
-    if (!this.props.active) {
+    if (!this.active) {
       return;
     }
 
@@ -76,9 +105,34 @@ class AddBlockButton extends Component {
     }
   }
 
+  shouldActive() {
+    const { editorState } = this.props;
+    const selection = editorState.getSelection();
+    const contentState = editorState.getCurrentContent();
+    if (
+      !selection.isCollapsed() ||
+      selection.anchorKey !== selection.focusKey || // 有范围选择
+      contentState
+        .getBlockForKey(selection.getAnchorKey())
+        .getType()
+        .indexOf(BlockType.ATOMIC) >= 0 // 在原子块内
+    ) {
+      return false;
+    }
+
+    const block = contentState.getBlockForKey(selection.anchorKey);
+
+    if (block.getLength() > 0) {
+      return false;
+    }
+
+    return true;
+  }
+
   render() {
     const { expand } = this.state;
-    const { active, buttons } = this.props;
+    const { buttons } = this.props;
+    const active = this.active;
 
     const timeoutUnit = Math.ceil(totalTime / buttons.length);
 

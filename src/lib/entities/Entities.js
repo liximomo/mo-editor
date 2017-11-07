@@ -3,10 +3,6 @@ import * as EntityType from './TypeOfEntites';
 
 const entityPropertyList = [
   {
-    type: EntityType.BREAK,
-    mutatble: 'IMMUTABLE',
-  },
-  {
     type: EntityType.LINK,
     mutatble: 'MUTABLE',
   },

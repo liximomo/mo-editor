@@ -151,3 +151,40 @@ export function replaceCurrentBlock(editorState, newType = BlockType.UNSTYLED, n
 export function insertAtomicBlock(editorState, entityKey, character) {
   return AtomicBlockUtils.insertAtomicBlock(editorState, entityKey, character);
 }
+
+/*
+ * 替换选择所在的当前块，被替换的块应该总是空的
+ */
+export function removeCurrentAndInsertAtomicBlock(editorState, entityKey, character) {
+  const contentState = editorState.getCurrentContent();
+  const selectionState = editorState.getSelection();
+
+  const afterRemoval = Modifier.removeRange(contentState, selectionState, 'backward');
+
+  const targetSelection = afterRemoval.getSelectionAfter();
+
+  const asAtomicBlock = Modifier.setBlockType(afterRemoval, targetSelection, BlockType.ATOMIC);
+
+  const charData = CharacterMetadata.create({ entity: entityKey });
+
+  const fragmentArray = [
+    new ContentBlock({
+      type: BlockType.ATOMIC,
+      text: character,
+      key: genKey(),
+      characterList: List(Repeat(charData, character.length)),
+    }),
+    createBlock(),
+  ];
+
+  const fragment = BlockMapBuilder.createFromArray(fragmentArray);
+
+  const withBlock = Modifier.replaceWithFragment(asAtomicBlock, targetSelection, fragment);
+
+  const newContent = withBlock.merge({
+    selectionBefore: selectionState,
+    selectionAfter: withBlock.getSelectionAfter().set('hasFocus', true),
+  });
+
+  return EditorState.push(editorState, newContent, OpType.INSERT_BLOCK);
+}

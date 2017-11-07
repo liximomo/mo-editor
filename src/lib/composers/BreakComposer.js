@@ -2,15 +2,14 @@ import React, { Component } from 'react';
 import Control from '../Control';
 import Button from '../components/Button';
 import IconBreak from '../components/icons/IconBreak';
-import { insertAtomicBlock, removeCurrentAndInsertNewBlock } from '../operation/Block';
+import { removeCurrentAndInsertAtomicBlock } from '../operation/Block';
 import AtomicBlockBreakPlugin from '../blocks/plugins/AtomicBlockBreakPlugin';
 
 class BreakComposer extends Component {
   handleButtonClick = () => {
     const { editorState, setEditorState } = this.props;
-    setEditorState(
-      removeCurrentAndInsertNewBlock(editorState, AtomicBlockBreakPlugin.createBlock())
-    );
+    const { newEditorState, entityKey } = AtomicBlockBreakPlugin.createEntity(editorState);
+    setEditorState(removeCurrentAndInsertAtomicBlock(newEditorState, entityKey, ' '));
   };
 
   render() {

@@ -55,10 +55,7 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "peerDependencies": {
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0"
-  },
+  "peerDependencies": {},
   "devDependencies": {
     "autoprefixer": "7.1.2",
     "babel-core": "6.25.0",
@@ -88,7 +85,9 @@
     "postcss-flexbugs-fixes": "3.2.0",
     "postcss-loader": "2.0.6",
     "promise": "8.0.1",
+    "react": "^16.0.0",
     "react-dev-utils": "^4.1.0",
+    "react-dom": "^16.0.0",
     "sass-loader": "^6.0.6",
     "style-loader": "0.18.2",
     "sw-precache-webpack-plugin": "0.11.4",

@@ -4,7 +4,7 @@ export default function createEditorState(content, convert, decorators) {
   let contentState;
   if (content == null) {
     contentState = ContentState.createFromText('');
-  }else if (typeof content === 'string') {
+  } else if (typeof content === 'string') {
     contentState = ContentState.createFromText(content);
   } else {
     contentState = convert(content);

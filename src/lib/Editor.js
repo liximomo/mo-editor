@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
-import { Editor as Draft, RichUtils } from 'draft-js';
+import { Editor as DraftEditor, RichUtils } from 'draft-js';
 import isSoftNewlineEvent from 'draft-js/lib/isSoftNewlineEvent';
 import { HANDLED, NOT_HANDLED } from './DraftConstants';
 
@@ -15,7 +15,7 @@ import * as BlockType from './blocks/TypeOfBlock';
 import * as InlineStyle from './inline-styles/TypeOfInlineStyles';
 
 import Popover from './components/Popover';
-import Toolbar from './components/Toolbar';
+import InlineToolbar from './components/InlineToolbar';
 import AddBlockButton from './components/AddBlockButton';
 
 import LinkComposer from './composers/LinkComposer';
@@ -23,11 +23,6 @@ import createBlockComposer from './composers/createBlockComposer';
 import createInlineComposer from './composers/createInlineComposer';
 import ImageComposer from './composers/ImageComposer';
 import BreakComposer from './composers/BreakComposer';
-
-import {
-  getSelectionRect as getNativeSelectionRect,
-  getSelection as getNativeSelection,
-} from './utils/selection';
 
 // eslint-disable-next-line import/first
 import 'draft-js/dist/Draft.css';
@@ -79,7 +74,7 @@ export default class Editor extends Component {
   getChildContext() {
     return {
       editorState: this.state.editorState,
-      setEditorState: this.handleChange,
+      setEditorState: this.setEditorState,
       getEditor: this.getEditor,
     };
   }
@@ -160,61 +155,22 @@ export default class Editor extends Component {
     // return NOT_HANDLED;
   }
 
-  handleChange = (editorState, cb) => {
+  handleKeyCommand = (command, editorState) => {
+    const newState = RichUtils.handleKeyCommand(editorState, command);
+    if (newState) {
+      this.setEditorState(newState);
+      return 'handled';
+    }
+
+    return 'not-handled';
+  };
+
+  setEditorState = (editorState, cb) => {
     this.setState({ editorState }, () => {
-      if (cb) {
-        cb(this);
-      }
+      if (cb) cb(this);
       this.focus();
     });
   };
-
-  shouldActivePopover() {
-    const editorState = this.getEditorState();
-    const selection = editorState.getSelection();
-    let hasValidSelection = false;
-
-    hasValidSelection = !selection.isCollapsed();
-
-    return this.state.isPopoverActive || hasValidSelection;
-  }
-
-  getSelectionRect = () => {
-    const editorState = this.getEditorState();
-    const selection = editorState.getSelection();
-
-    if (selection.isCollapsed()) {
-      return;
-    }
-
-    const nativeSelection = getNativeSelection(window);
-    const selectionRect = getNativeSelectionRect(nativeSelection);
-    return selectionRect;
-  };
-
-  shouldActiveAddBlockButton() {
-    const editorState = this.getEditorState();
-    const selection = editorState.getSelection();
-    const contentState = editorState.getCurrentContent();
-    if (
-      !selection.isCollapsed() ||
-      selection.anchorKey !== selection.focusKey || // 有范围选择
-      contentState
-        .getBlockForKey(selection.getAnchorKey())
-        .getType()
-        .indexOf(BlockType.ATOMIC) >= 0 // 在原子块内
-    ) {
-      return false;
-    }
-
-    const block = contentState.getBlockForKey(selection.anchorKey);
-
-    if (block.getLength() > 0) {
-      return false;
-    }
-
-    return true;
-  }
 
   render() {
     const editorState = this.getEditorState();
@@ -222,27 +178,32 @@ export default class Editor extends Component {
     return (
       <div className="MoEditor">
         <div className="MoEditor__editorContainer" ref={this.setEditorContainerNode}>
-          <Draft
-            {...this.props}
+          <DraftEditor
+            placeholder="Enter some text..."
             ref={this.setEditorInstance}
-            editorState={this.state.editorState}
-            onChange={this.handleChange}
+            editorState={editorState}
+            onChange={this.setEditorState}
+            handleKeyCommand={this.handleKeyCommand}
             blockRenderMap={blockRenderMap}
             blockRendererFn={this.blockRendererFn}
           />
           <AddBlockButton
-            active={this.shouldActiveAddBlockButton()}
             editorState={editorState} /* 正确响应编辑器状态更新 */
             positionNode={this._editorContainer}
             buttons={defaultBlockButtons}
           />
-          <Popover
+          <InlineToolbar
+            editorNode={this._editorContainer}
+            editorState={editorState} /* 正确响应编辑器状态更新 */
+            buttons={defaultButtons}
+          />
+          {/* <Popover
             active={this.shouldActivePopover()}
             positionNode={this._editorContainer}
             getTargetRect={this.getSelectionRect}
           >
             <Toolbar editorState={editorState} buttons={defaultButtons} />
-          </Popover>
+          </Popover> */}
         </div>
       </div>
     );
