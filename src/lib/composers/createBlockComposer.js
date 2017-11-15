@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import Control from '../Control';
 import IconQuote from '../components/icons/IconQuote';
+import IconTitle from '../components/icons/IconTitle';
+import IconTitleS from '../components/icons/IconTitleS';
 import { toggleBlockType, getCurrentBlockType } from '../operation/Block';
 
-import Button from '../components/Button';
+import Button from '../components/IconButton';
 import * as BlockType from '../blocks/TypeOfBlock';
 
 class BlockComposer extends Component {
@@ -26,11 +28,11 @@ export default function createBlockComposer(blockType) {
   let title;
   switch (blockType) {
     case BlockType.H3:
-      icon = 'H';
+      icon = IconTitle;
       title = '标题';
       break;
     case BlockType.H4:
-      icon = <span style={{ fontSize: '0.8em' }}>H</span>;
+      icon = IconTitleS;
       title = '子标题';
       break;
     case BlockType.BLOCKQUOTE:
@@ -44,7 +46,7 @@ export default function createBlockComposer(blockType) {
   return {
     id: blockType,
     title,
-    element: (
+    render: _ => (
       <Control render={props => <BlockComposer icon={icon} type={blockType} {...props} />} />
     ),
   };

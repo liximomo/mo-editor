@@ -4,7 +4,7 @@ import enhanceWithClickOutside from 'react-click-outside';
 import TransitionGroup from 'react-transition-group/TransitionGroup';
 import Transition from 'react-transition-group/Transition';
 
-import Button from './Button';
+import Button from './IconButton';
 import IconAdd from './icons/IconAdd';
 
 import * as BlockType from '../blocks/TypeOfBlock';
@@ -18,7 +18,7 @@ import './AddBlockButton.scss';
 
 const totalTime = 200;
 
-const ButtonBox = ({ children }) => <div className="MoEditorAddBlockButton__box">{children}</div>;
+const ButtonBox = ({ children }) => <div className="MoAddBlockButton__box">{children}</div>;
 
 function isEmptyLine(editorState) {
   const selection = editorState.getSelection();
@@ -137,7 +137,7 @@ class AddBlockButton extends Component {
     const timeoutUnit = Math.ceil(totalTime / buttons.length);
 
     return (
-      <div className={`MoEditorAddBlockButton${active ? ' is-active' : ''}`} ref={this.setNode}>
+      <div className={`MoAddBlockButton${active ? ' is-active' : ''}`} ref={this.setNode}>
         {active
           ? [
               <Button

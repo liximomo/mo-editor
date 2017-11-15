@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import './Button.scss';
+import './IconButton.scss';
 
 const Button = props => {
   const { icon, active, modifier, onClick, className, ...rest } = props;
   const clz = [
     className,
-    'MoEditorActionBtn',
+    'MoIconBtn',
     active ? ' is-active' : '',
-    modifier ? `MoEditorActionBtn--${modifier}` : '',
+    modifier ? `MoIconBtn--${modifier}` : '',
   ].join(' ');
 
   return (

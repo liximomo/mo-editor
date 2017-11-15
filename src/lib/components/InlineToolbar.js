@@ -1,5 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { EditorState } from 'draft-js';
+// import cn from 'classnames';
+
 import {
   getSelectionRect as getNativeSelectionRect,
   getSelection as getNativeSelection,
@@ -8,6 +11,12 @@ import Popover from './Popover';
 
 import './InlineToolbar.scss';
 
+// 由于 InlineToolbar 是单例，所以全局状态是安全的
+let cacheSelectReact;
+let preSelectionRect;
+let preservedSelection;
+
+// 单例
 class InlineToolbar extends Component {
   static propTypes = {
     buttons: PropTypes.arrayOf(
@@ -19,7 +28,15 @@ class InlineToolbar extends Component {
     ).isRequired,
   };
 
+  state = {
+    extendView: null,
+  };
+
   getSelectionRect = () => {
+    if (this.state.extendView !== null) {
+      return cacheSelectReact;
+    }
+
     const { editorState } = this.props;
     const selection = editorState.getSelection();
 
@@ -29,7 +46,28 @@ class InlineToolbar extends Component {
 
     const nativeSelection = getNativeSelection(window);
     const selectionRect = getNativeSelectionRect(nativeSelection);
+    preSelectionRect = selectionRect;
     return selectionRect;
+  };
+
+  showExtend = view => {
+    const { setEditorState, editorState } = this.props;
+
+    if (view !== null) {
+      preservedSelection = editorState.getSelection();
+    }
+
+    cacheSelectReact = preSelectionRect;
+    this.setState(
+      {
+        extendView: view,
+      },
+      () => {
+        if (!view) {
+          setEditorState(EditorState.acceptSelection(editorState, preservedSelection));
+        }
+      }
+    );
   };
 
   // 是否显示
@@ -38,7 +76,7 @@ class InlineToolbar extends Component {
     const selection = editorState.getSelection();
     const hasValidSelection = !selection.isCollapsed();
 
-    return hasValidSelection;
+    return hasValidSelection || this.state.extendView !== null;
   }
 
   render() {
@@ -49,23 +87,27 @@ class InlineToolbar extends Component {
         positionNode={editorNode}
         getTargetRect={this.getSelectionRect}
       >
-        <div className="MoEditorToolbar">
-          {buttons.map((item, index) => {
-            if (item.id === 'separator') {
-              return (
-                <div
-                  key={`separator${index}`}
-                  className="MoEditorToolbar__btn MoEditorToolbar__btn--separator"
-                />
-              );
-            }
+        <div className="MoInlineToolbar">
+          {this.state.extendView
+            ? this.state.extendView
+            : buttons.map((item, index) => {
+                if (item.id === 'separator') {
+                  return (
+                    <div
+                      key={`separator${index}`}
+                      className="MoInlineToolbar__btn MoInlineToolbar__btn--separator"
+                    />
+                  );
+                }
 
-            return (
-              <div className="MoEditorToolbar__btn" key={item.id} title={item.title}>
-                {item.element}
-              </div>
-            );
-          })}
+                return (
+                  <div className="MoInlineToolbar__btn" key={item.id} title={item.title}>
+                    {item.render({
+                      showExtend: this.showExtend,
+                    })}
+                  </div>
+                );
+              })}
         </div>
       </Popover>
     );

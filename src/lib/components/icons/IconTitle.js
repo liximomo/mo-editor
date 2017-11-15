@@ -8,7 +8,7 @@ export default (
     width="21"
     height="21"
   >
-    <path d="M0 0h24v24H0z" fill="none" />
-    <path d="M10 4v3h2.21l-3.42 8H6v3h8v-3h-2.21l3.42-8H18V4z" />
+    <path d="M5 4v3h5.5v12h3V7H19V4z" />
+    <path d="M0 0h24v24H0V0z" fill="none" />
   </svg>
 );

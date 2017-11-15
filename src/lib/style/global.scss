@@ -1,3 +1,9 @@
 @import './theme/default';
 @import './animition';
 @import './icon';
+
+.MoEditor *,
+.MoEditor *:before,
+.MoEditor *:after, {
+  box-sizing: border-box;
+}

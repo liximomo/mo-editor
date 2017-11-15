@@ -2,7 +2,7 @@
 
 $button-size: 32px;
 
-.MoEditorAddBlockButton {
+.MoAddBlockButton {
   position: absolute;
   left: -($button-size + 20);
   top: -5px;
@@ -13,7 +13,7 @@ $button-size: 32px;
 
   transform: translate3d(0, 0, 0);
 
-  .MoEditorActionBtn {
+  .MoIconBtn {
     width: $button-size;
     height: $button-size;
     border-radius: 100%;
@@ -21,31 +21,31 @@ $button-size: 32px;
     margin-right: 9px;
   }
 
-  .MoEditorActionBtn:focus {
+  .MoIconBtn:focus {
     outline: 0;
   }
 
-  .MoEditorActionBtn .MoEditorIcon {
+  .MoIconBtn .MoIcon {
     width: 24px;
     height: 24px;
   }
 
-  .MoEditorActionBtn--add {
+  .MoIconBtn--add {
     margin-right: 0;
     transition: transform 0.2s ease;
   }
 
-  .MoEditorActionBtn--add .MoEditorIcon {
+  .MoIconBtn--add .MoIcon {
     width: 30px;
     height: 30px;
   }
 
-  .MoEditorActionBtn--add.is-active {
+  .MoIconBtn--add.is-active {
     transform: rotate(45deg);
   }
 }
 
-.MoEditorAddBlockButton.is-active {
+.MoAddBlockButton.is-active {
   visibility: visible;
   pointer-events: auto;
 
@@ -53,7 +53,7 @@ $button-size: 32px;
   transition: transform 180ms ease-out;
 }
 
-.MoEditorAddBlockButton__box {
+.MoAddBlockButton__box {
   margin-left: 16px;
   float: right;
 }

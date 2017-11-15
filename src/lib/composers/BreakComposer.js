@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Control from '../Control';
-import Button from '../components/Button';
+import Button from '../components/IconButton';
 import IconBreak from '../components/icons/IconBreak';
 import { removeCurrentAndInsertAtomicBlock } from '../operation/Block';
 import AtomicBlockBreakPlugin from '../blocks/plugins/AtomicBlockBreakPlugin';

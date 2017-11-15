@@ -1,43 +1,47 @@
 @import '../style/theme/default';
 
-.MoEditorToolbar {
+.MoInlineToolbar {
+  position: relative;
+  height: 100%;
+  width: 100%;
   user-select: none;
+  padding: 6px 10px;
 }
 
-.MoEditorToolbar__btn {
+.MoInlineToolbar__btn {
   display: inline-block;
   vertical-align: middle;
-  margin: 0 6px;
+  margin: 0 2px;
 }
 
-.MoEditorToolbar__btn--separator {
+.MoInlineToolbar__btn--separator {
   width: 1px;
   height: 24px;
+  margin: 0 6px;
   background: rgba(255, 255, 255, 0.2);
 }
 
-.MoEditorToolbar {
-  .MoEditorActionBtn {
+.MoInlineToolbar {
+  .MoIconBtn {
     color: $toolbar-text-color;
-
-    .MoEditorIcon {
-      fill: $toolbar-text-color;
-    }
+    height: 34px;
   }
 
-  .MoEditorActionBtn {
-    height: 46px;
-    
-    .MoEditorIcon {
-      width: 21px;
-      height: 21px;
-    }
+  .MoIcon {
+    fill: $toolbar-text-color;
+    width: 21px;
+    height: 21px;
   }
 
-  .MoEditorActionBtn.is-active {
+  .MoIcon--titleS {
+    width: 14px;
+    height: 14px;
+  }
+
+  .MoIconBtn.is-active {
     color: $toolbar-text-activeColor;
 
-    .MoEditorIcon {
+    .MoIcon {
       fill: $toolbar-text-activeColor;
     }
   }

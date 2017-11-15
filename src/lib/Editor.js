@@ -5,7 +5,7 @@ import { Editor as DraftEditor, RichUtils } from 'draft-js';
 import isSoftNewlineEvent from 'draft-js/lib/isSoftNewlineEvent';
 import { HANDLED, NOT_HANDLED } from './DraftConstants';
 
-import { getCurrentBlock } from './operation/Block';
+// import { getCurrentBlock } from './operation/Block';
 
 import createEditorState from './createEditorState';
 import decorators from './decorators';
@@ -30,16 +30,16 @@ import './style/global.scss';
 import './Editor.scss';
 
 const defaultButtons = [
-  createBlockComposer(BlockType.H3),
-  createBlockComposer(BlockType.H4),
-  createBlockComposer(BlockType.BLOCKQUOTE),
-  {
-    id: 'separator',
-  },
   createInlineComposer(InlineStyle.BOLD),
   createInlineComposer(InlineStyle.ITALIC),
   createInlineComposer(InlineStyle.UNDERLINE),
   LinkComposer,
+  {
+    id: 'separator',
+  },
+  createBlockComposer(BlockType.H3),
+  createBlockComposer(BlockType.H4),
+  createBlockComposer(BlockType.BLOCKQUOTE),
 ];
 
 const defaultBlockButtons = [ImageComposer, BreakComposer];
@@ -172,6 +172,10 @@ export default class Editor extends Component {
     });
   };
 
+  onChange = editorState => {
+    this.setState({ editorState });
+  };
+
   render() {
     const editorState = this.getEditorState();
 
@@ -182,7 +186,7 @@ export default class Editor extends Component {
             placeholder="Enter some text..."
             ref={this.setEditorInstance}
             editorState={editorState}
-            onChange={this.setEditorState}
+            onChange={this.onChange}
             handleKeyCommand={this.handleKeyCommand}
             blockRenderMap={blockRenderMap}
             blockRendererFn={this.blockRendererFn}
@@ -195,6 +199,7 @@ export default class Editor extends Component {
           <InlineToolbar
             editorNode={this._editorContainer}
             editorState={editorState} /* 正确响应编辑器状态更新 */
+            setEditorState={this.setEditorState}
             buttons={defaultButtons}
           />
           {/* <Popover

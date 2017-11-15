@@ -6,7 +6,7 @@ import IconUnderline from '../components/icons/IconUnderline';
 import Control from '../Control';
 import { toggleInlineStyle, getCurrentInlineStyle } from '../operation/InlineStyle';
 
-import Button from '../components/Button';
+import Button from '../components/IconButton';
 import * as InlineStyle from '../inline-styles/TypeOfInlineStyles';
 
 class InlineComposer extends Component {
@@ -47,6 +47,8 @@ export default function createBlockComposer(style) {
   return {
     id: style,
     title,
-    element: <Control render={props => <InlineComposer icon={icon} type={style} {...props} />} />,
+    render: _ => (
+      <Control render={props => <InlineComposer icon={icon} type={style} {...props} />} />
+    ),
   };
 }

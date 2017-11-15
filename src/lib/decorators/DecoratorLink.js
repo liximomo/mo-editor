@@ -4,14 +4,14 @@ import createTypeStrategy from '../utils/createTypeStrategy';
 
 const Link = props => {
   const { contentState, entityKey } = props;
-  const { url } = contentState.getEntity(entityKey).getData();
+  const { href } = contentState.getEntity(entityKey).getData();
   return (
     <a
       className="MoEditor__link"
-      href={url}
+      href={href}
       rel="noopener noreferrer"
       target="_blank"
-      aria-label={url}
+      aria-label={href}
     >
       {props.children}
     </a>

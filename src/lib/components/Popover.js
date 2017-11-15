@@ -46,6 +46,9 @@ export default class Popover extends Component {
     const nodeClientRect = node.getBoundingClientRect();
     const positionClientRect = positionNode.getBoundingClientRect();
 
+    // fixme 尺寸会意外缩小
+    console.log('nodeClientRect', nodeClientRect);
+
     // 居中
     const widthDiff = targetRect.width - nodeClientRect.width;
 
@@ -84,6 +87,8 @@ export default class Popover extends Component {
     // node.style[styleTrans.transformProp] = `translate3d(${left}px, ${top}px, 0)`;
     node.style.left = `${left}px`;
     node.style.top = `${top}px`;
+    node.style.width = `${nodeClientRect.width}px`;
+    node.style.height = `${nodeClientRect.height}px`;
     node.classList.remove('is-top', 'is-bottom');
     node.classList.add(`is-${classModifer}`);
   }
@@ -96,7 +101,7 @@ export default class Popover extends Component {
     const { active } = this.props;
 
     return (
-      <div className={`MoEditorPopover${active ? ' is-active' : ''}`} ref={this.setNode}>
+      <div className={`MoPopover${active ? ' is-active' : ''}`} ref={this.setNode}>
         {active ? this.props.children : null}
       </div>
     );

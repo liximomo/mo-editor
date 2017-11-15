@@ -10,9 +10,8 @@ const entityPropertyList = [
 
 const entitiyCreators = {};
 
-entityPropertyList.reduce(property => {
+entityPropertyList.forEach(property => {
   entitiyCreators[property.type] = createEntityCreator(property);
-  return entitiyCreators;
-}, entitiyCreators);
+});
 
 export default entitiyCreators;

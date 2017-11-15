@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ServiceHub from '../services/ServiceHub';
 import Control from '../Control';
-import Button from '../components/Button';
+import Button from '../components/IconButton';
 import IconImage from '../components/icons/IconImage';
 import { replaceCurrentBlock } from '../operation/Block';
 import { IMAGE } from '../blocks/TypeOfBlock';
@@ -54,5 +54,5 @@ class ImageComposer extends Component {
 export default {
   id: IMAGE,
   title: '插入图片',
-  element: <Control component={ImageComposer} />,
+  render: _ => <Control component={ImageComposer} />,
 };
