@@ -3,6 +3,29 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import MoEditor from '../lib';
 import registerServiceWorker from './registerServiceWorker';
+import { ColorPicker } from '../lib/components/ColorPicker';
 
-ReactDOM.render(<MoEditor placeholder={'开始写吧'} />, document.getElementById('root'));
+ReactDOM.render(
+  <ColorPicker 
+    onChange={(item) => console.log(item)}
+    colors={[
+      '#ccc',
+      '#999',
+      'red',
+      'yellow',
+      '#000',
+      '#434',
+      '#ededed',
+      '#0ff',
+      '#40E0D0',
+      '#C71585',
+      '#D2691E',
+      '#D2B48C',
+      '#DA70D6',
+      '#DC143C',
+      'hsla(67,0,0,.3)'
+    ]}
+  />,
+  document.getElementById('root')
+);
 registerServiceWorker();
