@@ -6,7 +6,7 @@ import IconImage from '../components/icons/IconImage';
 import { replaceCurrentBlock } from '../operation/Block';
 import { IMAGE } from '../blocks/TypeOfBlock';
 
-class ImageComposer extends Component {
+class ComposerImage extends Component {
   handleButtonClick = () => {
     this._inputNode.value = null;
     this._inputNode.click();
@@ -20,14 +20,15 @@ class ImageComposer extends Component {
       return;
     }
 
-    const { editorState, setEditorState } = this.props;
+    const { editorState, setEditorState, onInsertDone } = this.props;
 
     ServiceHub.uploadImage(file).then(img => {
       const { url } = img;
       setEditorState(
         replaceCurrentBlock(editorState, IMAGE, {
           src: url,
-        })
+        }),
+        onInsertDone
       );
     });
   };
@@ -54,5 +55,7 @@ class ImageComposer extends Component {
 export default {
   id: IMAGE,
   title: '插入图片',
-  render: _ => <Control component={ImageComposer} />,
+  render: props => (
+    <Control render={injectProps => <ComposerImage {...injectProps} {...props} />} />
+  ),
 };

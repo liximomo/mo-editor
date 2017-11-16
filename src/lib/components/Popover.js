@@ -43,11 +43,11 @@ export default class Popover extends Component {
     }
 
     const node = this._node;
+    node.style.width = '';
+    node.style.height = '';
     const nodeClientRect = node.getBoundingClientRect();
-    const positionClientRect = positionNode.getBoundingClientRect();
 
-    // fixme 尺寸会意外缩小
-    console.log('nodeClientRect', nodeClientRect);
+    const positionClientRect = positionNode.getBoundingClientRect();
 
     // 居中
     const widthDiff = targetRect.width - nodeClientRect.width;

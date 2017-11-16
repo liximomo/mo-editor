@@ -14,15 +14,15 @@ import BlockHub from './blocks/BlockHub';
 import * as BlockType from './blocks/TypeOfBlock';
 import * as InlineStyle from './inline-styles/TypeOfInlineStyles';
 
-import Popover from './components/Popover';
+// import Popover from './components/Popover';
 import InlineToolbar from './components/InlineToolbar';
 import AddBlockButton from './components/AddBlockButton';
 
-import LinkComposer from './composers/LinkComposer';
+import ComposerLink from './composers/ComposerLink';
 import createBlockComposer from './composers/createBlockComposer';
 import createInlineComposer from './composers/createInlineComposer';
-import ImageComposer from './composers/ImageComposer';
-import BreakComposer from './composers/BreakComposer';
+import InsertComposerImage from './composers/InsertComposerImage';
+import InsertComposerBreak from './composers/InsertComposerBreak';
 
 // eslint-disable-next-line import/first
 import 'draft-js/dist/Draft.css';
@@ -33,7 +33,7 @@ const defaultButtons = [
   createInlineComposer(InlineStyle.BOLD),
   createInlineComposer(InlineStyle.ITALIC),
   createInlineComposer(InlineStyle.UNDERLINE),
-  LinkComposer,
+  ComposerLink,
   {
     id: 'separator',
   },
@@ -42,7 +42,7 @@ const defaultButtons = [
   createBlockComposer(BlockType.BLOCKQUOTE),
 ];
 
-const defaultBlockButtons = [ImageComposer, BreakComposer];
+const defaultBlockButtons = [InsertComposerImage, InsertComposerBreak];
 
 export default class Editor extends Component {
   static propTypes = {
@@ -193,6 +193,7 @@ export default class Editor extends Component {
           />
           <AddBlockButton
             editorState={editorState} /* 正确响应编辑器状态更新 */
+            setEditorState={this.setEditorState}
             positionNode={this._editorContainer}
             buttons={defaultBlockButtons}
           />

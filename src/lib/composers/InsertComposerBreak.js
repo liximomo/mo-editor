@@ -5,20 +5,22 @@ import IconBreak from '../components/icons/IconBreak';
 import { removeCurrentAndInsertAtomicBlock } from '../operation/Block';
 import AtomicBlockBreakPlugin from '../blocks/plugins/AtomicBlockBreakPlugin';
 
-class BreakComposer extends Component {
+class InsertComposerBreak extends Component {
   handleButtonClick = () => {
-    const { editorState, setEditorState } = this.props;
+    const { editorState, setEditorState, onInsertDone } = this.props;
     const { newEditorState, entityKey } = AtomicBlockBreakPlugin.createEntity(editorState);
-    setEditorState(removeCurrentAndInsertAtomicBlock(newEditorState, entityKey, ' '));
+    setEditorState(removeCurrentAndInsertAtomicBlock(newEditorState, entityKey, ' '), onInsertDone);
   };
 
   render() {
-    return <Button key="btn" icon={IconBreak} onClick={this.handleButtonClick} />;
+    return <Button icon={IconBreak} onClick={this.handleButtonClick} />;
   }
 }
 
 export default {
   id: AtomicBlockBreakPlugin.type,
   title: '插入分隔符',
-  element: <Control component={BreakComposer} />,
+  render: props => (
+    <Control render={injectProps => <InsertComposerBreak {...injectProps} {...props} />} />
+  ),
 };

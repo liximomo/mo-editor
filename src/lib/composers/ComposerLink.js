@@ -58,7 +58,7 @@ const LinkComposer = class extends React.Component {
 };
 
 export default {
-  id: 'link',
+  id: LINK,
   title: '链接',
   render: props => <Control render={injectProps => <LinkComposer {...injectProps} {...props} />} />,
 };

@@ -129,6 +129,12 @@ class AddBlockButton extends Component {
     return true;
   }
 
+  onInsertDone = () => {
+    this.setState({
+      expand: false,
+    });
+  };
+
   render() {
     const { expand } = this.state;
     const { buttons } = this.props;
@@ -156,7 +162,9 @@ class AddBlockButton extends Component {
                             title={button.title}
                             className={`MoEditorActionWrapper LeftEnter LeftEnter-${status}`}
                           >
-                            {button.element}
+                            {button.render({
+                              onInsertDone: this.onInsertDone,
+                            })}
                           </div>
                         )}
                       </Transition>
