@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { BLOCK } from '../TypeOfContent';
 import Control from '../Control';
 import IconQuote from '../components/icons/IconQuote';
 import IconTitle from '../components/icons/IconTitle';
@@ -46,6 +47,7 @@ export default function createBlockComposer(blockType) {
   return {
     id: blockType,
     title,
+    type: BLOCK,
     render: _ => (
       <Control render={props => <BlockComposer icon={icon} type={blockType} {...props} />} />
     ),

@@ -5,7 +5,7 @@ import { Editor as DraftEditor, RichUtils } from 'draft-js';
 import isSoftNewlineEvent from 'draft-js/lib/isSoftNewlineEvent';
 import { HANDLED, NOT_HANDLED } from './DraftConstants';
 
-// import { getCurrentBlock } from './operation/Block';
+import { getSelectedBlock } from './operation/Selection';
 
 import createEditorState from './createEditorState';
 import decorators from './decorators';
@@ -69,6 +69,17 @@ export default class Editor extends Component {
       isPopoverActive: false,
       editorState: createEditorState(null, null, decorators),
     };
+    this.updateComputedValue();
+  }
+
+  componentDidUpdate() {
+    this.updateComputedValue();
+  }
+
+  updateComputedValue() {
+    const editorState = this.getEditorState();
+    this.currentBlock = getSelectedBlock(editorState);
+    this.currentBlockMeta = this.currentBlock.getData().get('meta') || {};
   }
 
   getChildContext() {
@@ -111,8 +122,12 @@ export default class Editor extends Component {
    * @memberof Editor
    */
   handleReturn(event) {
-    console.log('enter handle');
+    // TODO 换行清格式；inline 调到下一个快
     const editorState = this.getEditorState;
+    if (this.currentBlockMeta.inline) {
+      // TODO 调到下一行
+    }
+
     if (isSoftNewlineEvent(event)) {
       this.onChange(RichUtils.insertSoftNewline(editorState));
       return HANDLED;
@@ -187,6 +202,7 @@ export default class Editor extends Component {
             ref={this.setEditorInstance}
             editorState={editorState}
             onChange={this.onChange}
+            handleReturn={this.handleReturn}
             handleKeyCommand={this.handleKeyCommand}
             blockRenderMap={blockRenderMap}
             blockRendererFn={this.blockRendererFn}

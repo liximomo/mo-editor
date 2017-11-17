@@ -3,7 +3,7 @@ import ServiceHub from '../services/ServiceHub';
 import Control from '../Control';
 import Button from '../components/IconButton';
 import IconImage from '../components/icons/IconImage';
-import { replaceCurrentBlock } from '../operation/Block';
+import { createBlock, removeCurrentAndInsertNewBlock } from '../operation/Block';
 import { IMAGE } from '../blocks/TypeOfBlock';
 
 class ComposerImage extends Component {
@@ -23,11 +23,20 @@ class ComposerImage extends Component {
     const { editorState, setEditorState, onInsertDone } = this.props;
 
     ServiceHub.uploadImage(file).then(img => {
-      const { url } = img;
+      const { src } = img;
       setEditorState(
-        replaceCurrentBlock(editorState, IMAGE, {
-          src: url,
-        }),
+        removeCurrentAndInsertNewBlock(
+          editorState,
+          createBlock({
+            type: IMAGE,
+            data: {
+              src,
+              meta: {
+                inline: true,
+              }
+            },
+          })
+        ),
         onInsertDone
       );
     });

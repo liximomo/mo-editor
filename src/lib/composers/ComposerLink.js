@@ -7,6 +7,7 @@ import Control from '../Control';
 import Button from '../components/IconButton';
 import IconLink from '../components/icons/IconLink';
 import { getSelectionEntityKey } from '../operation/Selection';
+import { INLINE } from '../TypeOfContent';
 
 const createLinkEntity = entitiyCreators[LINK];
 
@@ -60,5 +61,6 @@ const LinkComposer = class extends React.Component {
 export default {
   id: LINK,
   title: '链接',
+  type: INLINE,
   render: props => <Control render={injectProps => <LinkComposer {...injectProps} {...props} />} />,
 };

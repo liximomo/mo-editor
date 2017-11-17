@@ -1,8 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-
 import { EditorBlock, EditorState, SelectionState } from 'draft-js';
-
 import { IMAGE } from '../TypeOfBlock';
 import { getCurrentBlock } from '../../operation/Block';
 
@@ -30,9 +28,9 @@ class BlockImage extends React.Component {
   //   setEditorState(EditorState.forceSelection(editorState, newSelection));
   // };
 
-  handleKeyDown(event) {
+  handleClick = event => {
     console.log('keydown in imge');
-  }
+  };
 
   render() {
     const { block } = this.props;
@@ -40,8 +38,8 @@ class BlockImage extends React.Component {
     const src = data.get('src');
     if (src !== null) {
       return [
-        <img key="img" role="presentation" src={src} />,
-        <figcaption key="figcaption" onKeyDown={this.handleKeyDown}>
+        <img key="img" role="presentation" src={src} onClick={this.handleClick} />,
+        <figcaption key="figcaption">
           <EditorBlock {...this.props} />
         </figcaption>,
       ];
@@ -52,5 +50,7 @@ class BlockImage extends React.Component {
 
 export default {
   type: IMAGE,
-  component: BlockImage,
+  renderer: {
+    component: BlockImage,
+  },
 };

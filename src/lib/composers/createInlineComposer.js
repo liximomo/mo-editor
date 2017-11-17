@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+import { INLINE } from '../TypeOfContent';
 import IconBold from '../components/icons/IconBold';
 import IconItalic from '../components/icons/IconItalic';
 import IconUnderline from '../components/icons/IconUnderline';
@@ -47,6 +48,7 @@ export default function createBlockComposer(style) {
   return {
     id: style,
     title,
+    type: INLINE,
     render: _ => (
       <Control render={props => <InlineComposer icon={icon} type={style} {...props} />} />
     ),

@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { EditorState } from 'draft-js';
+import { INLINE } from '../TypeOfContent';
+import { getSelectedBlock } from '../operation/Selection';
 // import cn from 'classnames';
 
 import {
@@ -26,11 +28,11 @@ class InlineToolbar extends Component {
         title: PropTypes.string,
       })
     ).isRequired,
-  };
+  }
 
   state = {
     extendView: null,
-  };
+  }
 
   getSelectionRect = () => {
     if (this.state.extendView !== null) {
@@ -48,7 +50,14 @@ class InlineToolbar extends Component {
     const selectionRect = getNativeSelectionRect(nativeSelection);
     preSelectionRect = selectionRect;
     return selectionRect;
-  };
+  }
+
+  getBlockMeta = () => {
+    const { editorState } = this.props;
+    const block = getSelectedBlock(editorState);
+    const meta = block.getData().get('meta');
+    return meta || {};
+  }
 
   showExtend = view => {
     const { setEditorState, editorState } = this.props;
@@ -68,7 +77,7 @@ class InlineToolbar extends Component {
         }
       }
     );
-  };
+  }
 
   // 是否显示
   shouldActive() {
@@ -81,6 +90,12 @@ class InlineToolbar extends Component {
 
   render() {
     const { buttons, editorNode } = this.props;
+    const { inline } = this.getBlockMeta();
+    let avaliableButtons = buttons;
+    if (inline) {
+      avaliableButtons = avaliableButtons.filter(btn => btn.type === INLINE);
+    }
+
     return (
       <Popover
         active={this.shouldActive()}
@@ -90,7 +105,7 @@ class InlineToolbar extends Component {
         <div className="MoInlineToolbar">
           {this.state.extendView
             ? this.state.extendView
-            : buttons.map((item, index) => {
+            : avaliableButtons.map((item, index) => {
                 if (item.id === 'separator') {
                   return (
                     <div

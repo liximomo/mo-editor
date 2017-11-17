@@ -131,7 +131,7 @@ export function removeCurrentAndInsertNewBlock(editorState, block) {
   return EditorState.push(editorState, newContent, OpType.INSERT_BLOCK);
 }
 
-export function replaceCurrentBlock(editorState, newType = BlockType.UNSTYLED, newBlock) {
+export function replaceCurrentBlock(editorState, newBlock) {
   const selectionState = editorState.getSelection();
   const contentState = editorState.getCurrentContent();
   const key = selectionState.getStartKey();
