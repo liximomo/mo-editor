@@ -30,13 +30,6 @@ export function createBlock(
   return new ContentBlock(constructParams);
 }
 
-/*
-Returns default block-level metadata for various block type. Empty object otherwise.
-*/
-export function getDefaultBlockData(blockType, initialData = {}) {
-  return initialData;
-}
-
 export function getCurrentBlock(editorState) {
   const selectionState = editorState.getSelection();
   const contentState = editorState.getCurrentContent();

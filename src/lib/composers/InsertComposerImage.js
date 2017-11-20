@@ -33,6 +33,7 @@ class ComposerImage extends Component {
               src,
               meta: {
                 inline: true,
+                blockInherit: false,
               }
             },
           })

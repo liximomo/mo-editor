@@ -6,6 +6,7 @@ import isSoftNewlineEvent from 'draft-js/lib/isSoftNewlineEvent';
 import { HANDLED, NOT_HANDLED } from './DraftConstants';
 
 import { getSelectedBlock } from './operation/Selection';
+import { toggleBlockType, insertNewBlock, createBlock } from './operation/Block';
 
 import createEditorState from './createEditorState';
 import decorators from './decorators';
@@ -122,10 +123,15 @@ export default class Editor extends Component {
    * @memberof Editor
    */
   handleReturn(event) {
-    // TODO 换行清格式；inline 调到下一个快
-    const editorState = this.getEditorState;
-    if (this.currentBlockMeta.inline) {
-      // TODO 调到下一行
+    const currentBlock = this.currentBlock;
+    const currentBlockMeta = this.currentBlockMeta;
+
+    const editorState = this.getEditorState();
+    const selection = editorState.getSelection();
+
+    if (currentBlockMeta.inline) {
+      this.onChange(insertNewBlock(editorState, createBlock()));
+      return HANDLED;
     }
 
     if (isSoftNewlineEvent(event)) {
@@ -137,37 +143,28 @@ export default class Editor extends Component {
       return NOT_HANDLED;
     }
 
-    // const currentBlock = getCurrentBlock(editorState);
-    // const blockType = currentBlock.getType();
+    const blockType = currentBlock.getType();
+    const blockLength = currentBlock.getLength();
+    if (blockType !== BlockType.UNSTYLED && blockLength === 0) {
+      this.onChange(toggleBlockType(editorState, BlockType.UNSTYLED));
+      return HANDLED;
+    }
 
-    // if (currentBlock.getLength() === 0) {
-    //   switch (blockType) {
-    //     case Block.UL:
-    //     case Block.OL:
-    //     case Block.BLOCKQUOTE:
-    //     case Block.BLOCKQUOTE_CAPTION:
-    //     case Block.CAPTION:
-    //     case Block.TODO:
-    //     case Block.H2:
-    //     case Block.H3:
-    //     case Block.H1:
-    //       this.onChange(resetBlockWithType(editorState, Block.UNSTYLED));
-    //       return HANDLED;
-    //     default:
-    //       return NOT_HANDLED;
-    //   }
-    // }
+    // 行内换行，插入 soft newline
+    if (currentBlock.getLength() === 0 && currentBlock.getLength() === 0) {
+      this.onChange(insertNewBlock(editorState, createBlock()));
+      return HANDLED;
+    }
 
-    // const selection = editorState.getSelection();
-
-    // if (selection.isCollapsed() && currentBlock.getLength() === selection.getStartOffset()) {
-    //   if (this.props.continuousBlocks.indexOf(blockType) < 0) {
-    //     this.onChange(addNewBlockAt(editorState, currentBlock.getKey()));
-    //     return HANDLED;
-    //   }
-    //   return NOT_HANDLED;
-    // }
-    // return NOT_HANDLED;
+    // 行尾换行
+    if (selection.isCollapsed() && blockLength === selection.getStartOffset()) {
+      if (currentBlockMeta.blockInherit) {
+        this.onChange(insertNewBlock(editorState, createBlock()));
+        return HANDLED;
+      }
+    }
+  
+    return NOT_HANDLED;
   }
 
   handleKeyCommand = (command, editorState) => {
