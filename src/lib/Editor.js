@@ -122,13 +122,14 @@ export default class Editor extends Component {
    * @returns 
    * @memberof Editor
    */
-  handleReturn(event) {
+  handleReturn = event => {
     const currentBlock = this.currentBlock;
     const currentBlockMeta = this.currentBlockMeta;
 
     const editorState = this.getEditorState();
     const selection = editorState.getSelection();
 
+    // 特定的 block 逻辑，优先级高，先处理
     if (currentBlockMeta.inline) {
       this.onChange(insertNewBlock(editorState, createBlock()));
       return HANDLED;
@@ -139,33 +140,33 @@ export default class Editor extends Component {
       return HANDLED;
     }
 
+    // 带修饰键的，不处理
     if (event.altKey || event.metaKey || event.ctrlKey) {
       return NOT_HANDLED;
     }
 
     const blockType = currentBlock.getType();
     const blockLength = currentBlock.getLength();
-    if (blockType !== BlockType.UNSTYLED && blockLength === 0) {
-      this.onChange(toggleBlockType(editorState, BlockType.UNSTYLED));
-      return HANDLED;
-    }
 
-    // 行内换行，插入 soft newline
-    if (currentBlock.getLength() === 0 && currentBlock.getLength() === 0) {
-      this.onChange(insertNewBlock(editorState, createBlock()));
-      return HANDLED;
-    }
-
-    // 行尾换行
-    if (selection.isCollapsed() && blockLength === selection.getStartOffset()) {
-      if (currentBlockMeta.blockInherit) {
-        this.onChange(insertNewBlock(editorState, createBlock()));
+    // 块内容为空，清空格式
+    if (blockType !== BlockType.UNSTYLED) {
+      if (blockLength === 0) {
+        this.onChange(toggleBlockType(editorState, BlockType.UNSTYLED));
         return HANDLED;
       }
+
+      // 行尾换行 插入新块
+      if (selection.isCollapsed() && blockLength === selection.getStartOffset()) {
+        // 缺省行为是继承块模型，这里针对非继承属性的块进行处理
+        if (!currentBlockMeta.blockInherit) {
+          this.onChange(insertNewBlock(editorState, createBlock()));
+          return HANDLED;
+        }
+      }
     }
-  
+
     return NOT_HANDLED;
-  }
+  };
 
   handleKeyCommand = (command, editorState) => {
     const newState = RichUtils.handleKeyCommand(editorState, command);

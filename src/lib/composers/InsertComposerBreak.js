@@ -4,11 +4,13 @@ import Button from '../components/IconButton';
 import IconBreak from '../components/icons/IconBreak';
 import { removeCurrentAndInsertAtomicBlock } from '../operation/Block';
 import AtomicBlockBreakPlugin from '../blocks/plugins/AtomicBlockBreakPlugin';
+import BlockHub from '../blocks/BlockHub';
 
 class InsertComposerBreak extends Component {
   handleButtonClick = () => {
     const { editorState, setEditorState, onInsertDone } = this.props;
-    const { newEditorState, entityKey } = AtomicBlockBreakPlugin.createEntity(editorState);
+    const blockPlugin = BlockHub.getAtomicBlock(AtomicBlockBreakPlugin.type);
+    const { newEditorState, entityKey } = blockPlugin.createEntity(editorState);
     setEditorState(removeCurrentAndInsertAtomicBlock(newEditorState, entityKey, ' '), onInsertDone);
   };
 

@@ -1,12 +1,11 @@
 import React from 'react';
 import { ATOMIC } from '../TypeOfBlock';
-import createEntityCreator from '../../entities/createEntityCreator';
+import { setupPlugin } from '../BlockHub';
 
 const AtomicBlockPlugins = {};
 
 const defaultPluginProps = {
-  editable: true,
-  dataCreator: a => a,
+  entityDataCreator: a => a,
 };
 
 function atomicRendererFn(type) {
@@ -17,26 +16,21 @@ function atomicRendererFn(type) {
   }
 }
 
-function injectCreateEntity(plugin) {
-  const { type, dataCreator } = plugin;
-  const entityCreator = createEntityCreator({
-    type: type,
-    mutatble: 'IMMUTABLE',
-  });
-
-  plugin.createEntity = (editorState, ...rest) => entityCreator(editorState, dataCreator(...rest));
-}
-
 export function injectAtomicBlockPlugin(plugin) {
-  Object.assign(plugin, defaultPluginProps, plugin);
-  injectCreateEntity(plugin);
-  AtomicBlockPlugins[plugin.type] = plugin;
+  const withDefault = Object.assign({}, defaultPluginProps, plugin);
+  setupPlugin(withDefault);
+  AtomicBlockPlugins[withDefault.type] = withDefault;
 }
 
 function BlockAtomic(props) {
   const { block, contentState } = props;
 
-  const entity = contentState.getEntity(block.getEntityAt(0));
+  const entityKey = block.getEntityAt(0);
+  if (!entityKey) {
+    return null;
+  }
+
+  const entity = contentState.getEntity(entityKey);
   const data = entity.getData();
   const type = entity.getType();
   const renderer = atomicRendererFn(type);
@@ -58,5 +52,8 @@ export default {
   renderer: {
     component: BlockAtomic,
     editable: false,
+  },
+  getPlugin(type) {
+    return AtomicBlockPlugins[type];
   },
 };

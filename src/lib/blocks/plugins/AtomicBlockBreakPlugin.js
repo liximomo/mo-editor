@@ -11,7 +11,4 @@ export default {
   renderer: {
     component: BlockBreak,
   },
-  // dataCreator,
-  // inject later
-  createEntity: null,
 };
