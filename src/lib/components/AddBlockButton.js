@@ -105,6 +105,7 @@ class AddBlockButton extends Component {
     }
   }
 
+  // $todo inactive in ul and ol
   shouldActive() {
     const { editorState } = this.props;
     const selection = editorState.getSelection();
