@@ -56,3 +56,61 @@ export function getSelectionEntityKey(editorState: EditorState): Entity {
   }
   return entity;
 }
+
+export function getSelectedBlocksList(editorState) {
+  const selectionState = editorState.getSelection();
+  const contentState = editorState.getCurrentContent();
+  const startKey = selectionState.getStartKey();
+  const endKey = selectionState.getEndKey();
+  const blockMap = contentState.getBlockMap();
+  return blockMap
+    .toSeq()
+    .skipUntil((_, k) => k === startKey)
+    .takeUntil((_, k) => k === endKey)
+    .concat([[endKey, blockMap.get(endKey)]])
+    .toList();
+}
+
+/**
+ * 获得选择的第一个快的文字
+ * @param {*} editorState
+ */
+export function getSelectedText(editorState) {
+  const selectionState = editorState.getSelection();
+  const anchorKey = selectionState.getAnchorKey();
+  const currentContent = editorState.getCurrentContent();
+  const currentContentBlock = currentContent.getBlockForKey(anchorKey);
+  const start = selectionState.getStartOffset();
+  const end = selectionState.getEndOffset();
+  const selectedText = currentContentBlock.getText().slice(start, end);
+  return selectedText;
+}
+
+/**
+ * 获得选择的全部的文字
+ * @param {*} editorState
+ */
+export function getSelectionTextAll(editorState) {
+  let selectedText = '';
+  const currentSelection = editorState.getSelection();
+  let start = currentSelection.getAnchorOffset();
+  let end = currentSelection.getFocusOffset();
+  const selectedBlockList = getSelectedBlocksList(editorState);
+  if (selectedBlockList.size > 0) {
+    if (currentSelection.getIsBackward()) {
+      const temp = start;
+      start = end;
+      end = temp;
+    }
+    for (let i = 0; i < selectedBlockList.size; i += 1) {
+      const blockStart = i === 0 ? start : 0;
+      const blockEnd =
+        i === selectedBlockList.size - 1 ? end : selectedBlockList.get(i).getText().length;
+      selectedText += selectedBlockList
+        .get(i)
+        .getText()
+        .slice(blockStart, blockEnd);
+    }
+  }
+  return selectedText;
+}

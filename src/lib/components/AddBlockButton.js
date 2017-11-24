@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import enhanceWithClickOutside from 'react-click-outside';
 import TransitionGroup from 'react-transition-group/TransitionGroup';
 import Transition from 'react-transition-group/Transition';
-import { getSelectedBlock } from '../operation/Selection';
 
 import Button from './IconButton';
 import IconAdd from './icons/IconAdd';
@@ -130,13 +129,6 @@ class AddBlockButton extends Component {
     return true;
   }
 
-  getBlockMeta = () => {
-    const { editorState } = this.props;
-    const block = getSelectedBlock(editorState);
-    const meta = block.getData().get('meta');
-    return meta || {};
-  };
-
   onInsertDone = () => {
     this.setState({
       expand: false,
@@ -145,8 +137,8 @@ class AddBlockButton extends Component {
 
   render() {
     const { expand } = this.state;
-    const { buttons } = this.props;
-    const { inline } = this.getBlockMeta();
+    const { buttons, blockMeta } = this.props;
+    const { inline } = blockMeta;
     const active = this.active && !inline;
 
     const timeoutUnit = Math.ceil(totalTime / buttons.length);

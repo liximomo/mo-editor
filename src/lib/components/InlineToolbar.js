@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { EditorState } from 'draft-js';
 import { INLINE } from '../TypeOfContent';
-import { getSelectedBlock } from '../operation/Selection';
+import { getSelectionTextAll } from '../operation/Selection';
 // import cn from 'classnames';
 
 import {
@@ -28,11 +28,11 @@ class InlineToolbar extends Component {
         title: PropTypes.string,
       })
     ).isRequired,
-  }
+  };
 
   state = {
     extendView: null,
-  }
+  };
 
   getSelectionRect = () => {
     if (this.state.extendView !== null) {
@@ -50,14 +50,7 @@ class InlineToolbar extends Component {
     const selectionRect = getNativeSelectionRect(nativeSelection);
     preSelectionRect = selectionRect;
     return selectionRect;
-  }
-
-  getBlockMeta = () => {
-    const { editorState } = this.props;
-    const block = getSelectedBlock(editorState);
-    const meta = block.getData().get('meta');
-    return meta || {};
-  }
+  };
 
   showExtend = view => {
     const { setEditorState, editorState } = this.props;
@@ -77,20 +70,25 @@ class InlineToolbar extends Component {
         }
       }
     );
-  }
+  };
 
   // 是否显示
   shouldActive() {
     const { editorState } = this.props;
     const selection = editorState.getSelection();
-    const hasValidSelection = !selection.isCollapsed();
+    let hasValidSelection = !selection.isCollapsed();
+
+    if (hasValidSelection) {
+      const selectedText = getSelectionTextAll(editorState);
+      hasValidSelection = hasValidSelection && selectedText.length > 0;
+    }
 
     return hasValidSelection || this.state.extendView !== null;
   }
 
   render() {
-    const { buttons, editorNode } = this.props;
-    const { inline } = this.getBlockMeta();
+    const { buttons, editorNode, blockMeta } = this.props;
+    const { inline } = blockMeta;
     let avaliableButtons = buttons;
     if (inline) {
       avaliableButtons = avaliableButtons.filter(btn => btn.type === INLINE);

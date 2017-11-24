@@ -73,16 +73,6 @@ export default class Editor extends Component {
     this.updateComputedValue();
   }
 
-  componentDidUpdate() {
-    this.updateComputedValue();
-  }
-
-  updateComputedValue() {
-    const editorState = this.getEditorState();
-    this.currentBlock = getSelectedBlock(editorState);
-    this.currentBlockMeta = this.currentBlock.getData().get('meta') || {};
-  }
-
   getChildContext() {
     return {
       editorState: this.state.editorState,
@@ -93,6 +83,12 @@ export default class Editor extends Component {
 
   componentDidMount() {
     this.focus();
+  }
+
+  updateComputedValue() {
+    const editorState = this.getEditorState();
+    this.currentBlock = getSelectedBlock(editorState);
+    this.currentBlockMeta = this.currentBlock.getData().get('meta') || {};
   }
 
   setEditorInstance = instance => {
@@ -116,10 +112,10 @@ export default class Editor extends Component {
   };
 
   /**
-   * 
+   *
    * 处理回车，主要是覆盖定制的 renderer 中回车行为
-   * @param {Event} event 
-   * @returns 
+   * @param {Event} event
+   * @returns
    * @memberof Editor
    */
   handleReturn = event => {
@@ -190,6 +186,9 @@ export default class Editor extends Component {
   };
 
   render() {
+    // 目前最合适的位置更新计算的属性
+    this.updateComputedValue();
+
     const editorState = this.getEditorState();
 
     return (
@@ -210,12 +209,14 @@ export default class Editor extends Component {
             setEditorState={this.setEditorState}
             positionNode={this._editorContainer}
             buttons={defaultBlockButtons}
+            blockMeta={this.currentBlockMeta}
           />
           <InlineToolbar
             editorNode={this._editorContainer}
             editorState={editorState} /* 正确响应编辑器状态更新 */
             setEditorState={this.setEditorState}
             buttons={defaultButtons}
+            blockMeta={this.currentBlockMeta}
           />
           {/* <Popover
             active={this.shouldActivePopover()}

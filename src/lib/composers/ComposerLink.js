@@ -2,11 +2,12 @@ import React from 'react';
 import { RichUtils, Entity } from 'draft-js';
 import LinkForm from './LinkForm';
 import { LINK } from '../entities/TypeOfEntites';
+import { ATOMIC } from '../blocks/TypeOfBlock';
 import entitiyCreators from '../entities/Entities';
 import Control from '../Control';
 import Button from '../components/IconButton';
 import IconLink from '../components/icons/IconLink';
-import { getSelectionEntityKey } from '../operation/Selection';
+import { getSelectionEntityKey, getSelectedBlocksList } from '../operation/Selection';
 import { INLINE } from '../TypeOfContent';
 
 const createLinkEntity = entitiyCreators[LINK];
@@ -35,6 +36,13 @@ const LinkComposer = class extends React.Component {
 
   handleClick = () => {
     const { showExtend, editorState, setEditorState } = this.props;
+    
+    const selectedBlock = getSelectedBlocksList(editorState);
+    const finded = selectedBlock.find(block => block.getType() === ATOMIC);
+    // 如果包含 atomic 块，禁止插入链接
+    if (finded) {
+      return;
+    }
 
     if (this.isActive) {
       setEditorState(RichUtils.toggleLink(editorState, editorState.getSelection(), null));
