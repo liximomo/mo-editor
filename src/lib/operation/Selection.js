@@ -1,25 +1,5 @@
-// /**
-// * Function returns collection of currently selected blocks.
-// */
-// export function getSelectedBlocksMap(editorState: EditorState): OrderedMap {
-//   const selectionState = editorState.getSelection();
-//   const contentState = editorState.getCurrentContent();
-//   const startKey = selectionState.getStartKey();
-//   const endKey = selectionState.getEndKey();
-//   const blockMap = contentState.getBlockMap();
-//   return blockMap
-//     .toSeq()
-//     .skipUntil((_, k) => k === startKey)
-//     .takeUntil((_, k) => k === endKey)
-//     .concat([[endKey, blockMap.get(endKey)]]);
-// }
-
-// /**
-// * Function returns collection of currently selected blocks.
-// */
-// export function getSelectedBlocksList(editorState: EditorState): List {
-//   return getSelectedBlocksMap(editorState).toList();
-// }
+import { EditorState, RichUtils } from 'draft-js';
+import * as OpType from './TypeOfOperation';
 
 export function getSelectedBlock(editorState: EditorState): ContentBlock {
   const selectionState = editorState.getSelection();
@@ -113,4 +93,21 @@ export function getSelectionTextAll(editorState) {
     }
   }
   return selectedText;
+}
+
+export function setSelectedBlockProperty(editorState, property) {
+  const selectionState = editorState.getSelection();
+  const contentState = editorState.getCurrentContent();
+  const selectedBlock = getSelectedBlock(editorState);
+  const newBlock = selectedBlock.merge(property);
+  const blockMap = contentState.getBlockMap();
+  const newContentState = contentState.merge({
+    blockMap: blockMap.set(newBlock.getKey(), newBlock),
+    selectionAfter: selectionState.merge({
+      anchorOffset: 0,
+      focusOffset: 0,
+    }),
+  });
+
+  return EditorState.push(editorState, newContentState, OpType.CHANGE_BLOCK_TYPE);
 }

@@ -28,11 +28,11 @@ export default function createBlockComposer(blockType) {
   let icon;
   let title;
   switch (blockType) {
-    case BlockType.H3:
+    case BlockType.TITLE:
       icon = IconTitle;
       title = '标题';
       break;
-    case BlockType.H4:
+    case BlockType.SUB_TITLE:
       icon = IconTitleS;
       title = '子标题';
       break;

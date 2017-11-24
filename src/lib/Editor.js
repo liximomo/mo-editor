@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Editor as DraftEditor, RichUtils } from 'draft-js';
 import isSoftNewlineEvent from 'draft-js/lib/isSoftNewlineEvent';
+import { handleInput } from './input-mods/InputMods';
 import { HANDLED, NOT_HANDLED } from './DraftConstants';
 
 import { getSelectedBlock } from './operation/Selection';
@@ -11,6 +12,7 @@ import { toggleBlockType, insertNewBlock, createBlock } from './operation/Block'
 import createEditorState from './createEditorState';
 import decorators from './decorators';
 import blockRenderMap from './blocks/blockRenderMap';
+import getDefaultBlockMeta from './blocks/getDefaultBlockMeta';
 import BlockHub from './blocks/BlockHub';
 import * as BlockType from './blocks/TypeOfBlock';
 import * as InlineStyle from './inline-styles/TypeOfInlineStyles';
@@ -38,8 +40,8 @@ const defaultButtons = [
   {
     id: 'separator',
   },
-  createBlockComposer(BlockType.H3),
-  createBlockComposer(BlockType.H4),
+  createBlockComposer(BlockType.TITLE),
+  createBlockComposer(BlockType.SUB_TITLE),
   createBlockComposer(BlockType.BLOCKQUOTE),
 ];
 
@@ -88,7 +90,8 @@ export default class Editor extends Component {
   updateComputedValue() {
     const editorState = this.getEditorState();
     this.currentBlock = getSelectedBlock(editorState);
-    this.currentBlockMeta = this.currentBlock.getData().get('meta') || {};
+    this.currentBlockMeta = this.currentBlock.getData().get('meta')
+      || getDefaultBlockMeta(this.currentBlock.getType());
   }
 
   setEditorInstance = instance => {
@@ -185,6 +188,10 @@ export default class Editor extends Component {
     this.setState({ editorState });
   };
 
+  handleBeforeInput = (chars, editorState) => {
+    return handleInput(chars, editorState, this.setEditorState);
+  };
+
   render() {
     // 目前最合适的位置更新计算的属性
     this.updateComputedValue();
@@ -201,6 +208,7 @@ export default class Editor extends Component {
             onChange={this.onChange}
             handleReturn={this.handleReturn}
             handleKeyCommand={this.handleKeyCommand}
+            handleBeforeInput={this.handleBeforeInput}
             blockRenderMap={blockRenderMap}
             blockRendererFn={this.blockRendererFn}
           />

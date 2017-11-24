@@ -6,6 +6,7 @@
     "classnames": "^2.2.5",
     "draft-js": "^0.10.3",
     "immutable": "^3.8.2",
+    "keycode": "^2.1.9",
     "prop-types": "^15.6.0",
     "react-click-outside": "^3.0.0",
     "react-transition-group": "^2.2.1"

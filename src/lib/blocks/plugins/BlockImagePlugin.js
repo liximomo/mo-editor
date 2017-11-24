@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { EditorBlock, EditorState, SelectionState } from 'draft-js';
+import { EditorBlock } from 'draft-js';
 import { IMAGE } from '../TypeOfBlock';
-import { getCurrentBlock } from '../../operation/Block';
 
 class BlockImage extends React.Component {
   static propTypes = {

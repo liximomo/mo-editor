@@ -6,7 +6,6 @@ import {
   Modifier,
   BlockMapBuilder,
   CharacterMetadata,
-  AtomicBlockUtils,
 } from 'draft-js';
 import { List, Repeat, Map } from 'immutable';
 import * as BlockType from '../blocks/TypeOfBlock';
@@ -28,13 +27,6 @@ export function createBlock(
   }
 
   return new ContentBlock(constructParams);
-}
-
-export function getCurrentBlock(editorState) {
-  const selectionState = editorState.getSelection();
-  const contentState = editorState.getCurrentContent();
-  const block = contentState.getBlockForKey(selectionState.getStartKey());
-  return block;
 }
 
 export function getCurrentBlockType(editorState) {
@@ -121,27 +113,6 @@ export function removeCurrentAndInsertNewBlock(editorState, block) {
   });
 
   return EditorState.push(editorState, newContent, OpType.INSERT_BLOCK);
-}
-
-export function replaceCurrentBlock(editorState, newBlock) {
-  const selectionState = editorState.getSelection();
-  const contentState = editorState.getCurrentContent();
-  const key = selectionState.getStartKey();
-  const blockMap = contentState.getBlockMap();
-  const currentBlock = getCurrentBlock(editorState);
-  if (!currentBlock) {
-    return editorState;
-  }
-
-  const newContentState = contentState.merge({
-    blockMap: blockMap.set(key, newBlock),
-    selectionAfter: selectionState,
-  });
-  return EditorState.push(editorState, newContentState, OpType.INSERT_BLOCK);
-}
-
-export function insertAtomicBlock(editorState, entityKey, character) {
-  return AtomicBlockUtils.insertAtomicBlock(editorState, entityKey, character);
 }
 
 /*

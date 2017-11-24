@@ -1,10 +1,12 @@
+import keycode from 'keycode';
+
 const commander = {};
 
-export function injectCommand(cmd, hanlde) {
+export function registerCommand(cmd, handle, keyBinding) {
   if (commander[cmd]) {
-    throw new Error(`command '${cmd}' has already registed`);
+    throw new Error(`command '${cmd}' has already registered`);
   }
-  commander[cmd] = hanlde;
+  commander[cmd] = handle;
 }
 
 export function execCommand(command, ...args) {
@@ -13,6 +15,7 @@ export function execCommand(command, ...args) {
     throw new Error(`can not exec command '${command}' without registration`);
   }
 
-  console.log(...args);
   return cmdFn(...args);
 }
+
+export function keyBinding() {}

@@ -3,10 +3,10 @@ import { DefaultDraftBlockRenderMap } from 'draft-js';
 import * as BlockType from './TypeOfBlock';
 
 const blockRenderMap = immutable.Map({
-  [BlockType.H3]: {
+  [BlockType.TITLE]: {
     element: 'h3',
   },
-  [BlockType.H4]: {
+  [BlockType.SUB_TITLE]: {
     element: 'h4',
   },
   [BlockType.IMAGE]: {
