@@ -2017,7 +2017,7 @@ dotenv@4.0.0:
   version "4.0.0"
   resolved "http://registry.npm.taobao.org/dotenv/download/dotenv-4.0.0.tgz#864ef1379aced55ce6f95debecdce179f7a0cd1d"
 
-draft-js@^0.10.3:
+draft-js@^0.10.4:
   version "0.10.4"
   resolved "http://registry.npm.taobao.org/draft-js/download/draft-js-0.10.4.tgz#147741642097c8120d8edc232e9503e8b7fb8d35"
   dependencies:
@@ -5334,9 +5334,9 @@ react-dev-utils@^4.1.0:
     object-assign "^4.1.1"
     prop-types "^15.6.0"
 
-react-dom@^16.1.0:
-  version "16.1.0"
-  resolved "http://registry.npm.taobao.org/react-dom/download/react-dom-16.1.0.tgz#ab6fd2a285096f388aeba51919a573d06c9bdde4"
+react-dom@^16.2.0:
+  version "16.2.0"
+  resolved "http://registry.npm.taobao.org/react-dom/download/react-dom-16.2.0.tgz#69003178601c0ca19b709b33a83369fe6124c044"
   dependencies:
     fbjs "^0.8.16"
     loose-envify "^1.1.0"
@@ -5376,9 +5376,9 @@ react-transition-group@^2.2.1:
     object-assign "^4.1.1"
     prop-types "^15.6.0"
 
-react@^16.1.0:
-  version "16.1.0"
-  resolved "http://registry.npm.taobao.org/react/download/react-16.1.0.tgz#1c2bdac3c17fe7ee9282fa35aca6cc36387903e1"
+react@^16.2.0:
+  version "16.2.0"
+  resolved "http://registry.npm.taobao.org/react/download/react-16.2.0.tgz#a31bd2dab89bff65d42134fa187f24d054c273ba"
   dependencies:
     fbjs "^0.8.16"
     loose-envify "^1.1.0"

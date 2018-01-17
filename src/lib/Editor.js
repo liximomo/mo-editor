@@ -3,16 +3,17 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Editor as DraftEditor, RichUtils } from 'draft-js';
 import isSoftNewlineEvent from 'draft-js/lib/isSoftNewlineEvent';
+import { keyBindingFn } from './commands/CommandHub';
 import { handleInput } from './input-mods/InputMods';
 import { HANDLED, NOT_HANDLED } from './DraftConstants';
 
-import { getSelectedBlock } from './operation/Selection';
+import { getSelectedBlock, getSelectionTextAll } from './operation/Selection';
 import { toggleBlockType, insertNewBlock, createBlock } from './operation/Block';
 
 import createEditorState from './createEditorState';
 import decorators from './decorators';
 import blockRenderMap from './blocks/blockRenderMap';
-import getDefaultBlockMeta from './blocks/getDefaultBlockMeta';
+import getBlockMeta from './blocks/getBlockMeta';
 import BlockHub from './blocks/BlockHub';
 import * as BlockType from './blocks/TypeOfBlock';
 import * as InlineStyle from './inline-styles/TypeOfInlineStyles';
@@ -67,12 +68,12 @@ export default class Editor extends Component {
   constructor(props) {
     super(props);
 
-    this.blockRendererFn = BlockHub.getBlockRendererFn();
     this.state = {
       isPopoverActive: false,
       editorState: createEditorState(null, null, decorators),
     };
-    this.updateComputedValue();
+
+    this.blockRendererFn = BlockHub.getBlockRendererFn(this.setEditorState, this.getEditorState);
   }
 
   getChildContext() {
@@ -90,8 +91,7 @@ export default class Editor extends Component {
   updateComputedValue() {
     const editorState = this.getEditorState();
     this.currentBlock = getSelectedBlock(editorState);
-    this.currentBlockMeta = this.currentBlock.getData().get('meta')
-      || getDefaultBlockMeta(this.currentBlock.getType());
+    this.currentBlockMeta = getBlockMeta(this.currentBlock);
   }
 
   setEditorInstance = instance => {
@@ -178,7 +178,14 @@ export default class Editor extends Component {
   };
 
   setEditorState = (editorState, cb) => {
-    this.setState({ editorState }, () => {
+    let nextState;
+    if (typeof editorState === 'function') {
+      nextState = editorState(this.getEditorState());
+    } else {
+      nextState = editorState;
+    }
+
+    this.setState({ editorState: nextState }, () => {
       if (cb) cb(this);
       this.focus();
     });
@@ -197,6 +204,8 @@ export default class Editor extends Component {
     this.updateComputedValue();
 
     const editorState = this.getEditorState();
+    const selection = editorState.getSelection();
+    const selectedText = getSelectionTextAll(editorState);
 
     return (
       <div className="MoEditor">
@@ -211,20 +220,24 @@ export default class Editor extends Component {
             handleBeforeInput={this.handleBeforeInput}
             blockRenderMap={blockRenderMap}
             blockRendererFn={this.blockRendererFn}
+            keyBindingFn={keyBindingFn}
           />
           <AddBlockButton
-            editorState={editorState} /* 正确响应编辑器状态更新 */
+            selection={selection}
             setEditorState={this.setEditorState}
             positionNode={this._editorContainer}
             buttons={defaultBlockButtons}
-            blockMeta={this.currentBlockMeta}
+            isLineEmpty={this.currentBlock.getLength() <= 0}
+            isInLine={this.currentBlockMeta.inline}
+            inAtomic={this.currentBlockMeta.isAtomic}
           />
           <InlineToolbar
             editorNode={this._editorContainer}
-            editorState={editorState} /* 正确响应编辑器状态更新 */
+            selection={selection}
+            selectedTextLength={selectedText.length}
             setEditorState={this.setEditorState}
             buttons={defaultButtons}
-            blockMeta={this.currentBlockMeta}
+            onlyInline={this.currentBlockMeta.inline}
           />
           {/* <Popover
             active={this.shouldActivePopover()}

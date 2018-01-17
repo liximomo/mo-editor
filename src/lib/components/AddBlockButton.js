@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import enhanceWithClickOutside from 'react-click-outside';
 import TransitionGroup from 'react-transition-group/TransitionGroup';
 import Transition from 'react-transition-group/Transition';
@@ -7,7 +7,6 @@ import Transition from 'react-transition-group/Transition';
 import Button from './IconButton';
 import IconAdd from './icons/IconAdd';
 
-import * as BlockType from '../blocks/TypeOfBlock';
 import { styleTrans } from '../utils/style';
 import {
   getSelectionRect as getNativeSelectionRect,
@@ -20,30 +19,19 @@ const totalTime = 200;
 
 const ButtonBox = ({ children }) => <div className="MoAddBlockButton__box">{children}</div>;
 
-function isEmptyLine(editorState) {
-  const selection = editorState.getSelection();
-  const contentState = editorState.getCurrentContent();
+function shouldActive(props) {
+  const { selection, isLineEmpty } = props;
   if (
     !selection.isCollapsed() ||
-    selection.anchorKey !== selection.focusKey || // 有范围选择
-    contentState
-      .getBlockForKey(selection.getAnchorKey())
-      .getType()
-      .indexOf(BlockType.ATOMIC) >= 0 // 在原子块内
+    selection.anchorKey !== selection.focusKey // 有范围选择
   ) {
     return false;
   }
 
-  const block = contentState.getBlockForKey(selection.anchorKey);
-
-  if (block.getLength() > 0) {
-    return false;
-  }
-
-  return true;
+  return isLineEmpty;
 }
 
-class AddBlockButton extends Component {
+class AddBlockButton extends PureComponent {
   static propTypes = {
     positionNode: PropTypes.object,
   };
@@ -54,11 +42,11 @@ class AddBlockButton extends Component {
 
   constructor(props) {
     super(props);
-    this.active = isEmptyLine(props.editorState);
+    this.active = shouldActive(props);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.active = isEmptyLine(nextProps.editorState);
+    this.active = shouldActive(nextProps);
   }
 
   componentDidUpdate() {
@@ -83,7 +71,6 @@ class AddBlockButton extends Component {
 
     const positionClientRect = positionNode.getBoundingClientRect();
     const top = selectionRect.top - positionClientRect.top;
-
     this._node.style[styleTrans.transformProp] = `translate3d(0, ${top}px, 0)`;
   }
 
@@ -105,30 +92,6 @@ class AddBlockButton extends Component {
     }
   }
 
-  shouldActive() {
-    const { editorState } = this.props;
-    const selection = editorState.getSelection();
-    const contentState = editorState.getCurrentContent();
-    if (
-      !selection.isCollapsed() ||
-      selection.anchorKey !== selection.focusKey || // 有范围选择
-      contentState
-        .getBlockForKey(selection.getAnchorKey())
-        .getType()
-        .indexOf(BlockType.ATOMIC) >= 0 // 在原子块内
-    ) {
-      return false;
-    }
-
-    const block = contentState.getBlockForKey(selection.anchorKey);
-
-    if (block.getLength() > 0) {
-      return false;
-    }
-
-    return true;
-  }
-
   onInsertDone = () => {
     this.setState({
       expand: false,
@@ -137,9 +100,8 @@ class AddBlockButton extends Component {
 
   render() {
     const { expand } = this.state;
-    const { buttons, blockMeta } = this.props;
-    const { inline } = blockMeta;
-    const active = this.active && !inline;
+    const { buttons, isInLine, inAtomic } = this.props;
+    const active = this.active && !isInLine && !inAtomic;
 
     const timeoutUnit = Math.ceil(totalTime / buttons.length);
 

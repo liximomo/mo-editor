@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
-import React from 'react';
-import { EditorBlock } from 'draft-js';
+import React, { Fragment } from 'react';
+import { EditorState, EditorBlock, SelectionState } from 'draft-js';
 import { IMAGE } from '../TypeOfBlock';
+import { getSelectedBlock } from '../../operation/Selection';
 
 class BlockImage extends React.Component {
   static propTypes = {
@@ -9,26 +10,27 @@ class BlockImage extends React.Component {
     blockProps: PropTypes.object,
   };
 
-  // focusBlock = () => {
-  //   const { block, blockProps } = this.props;
-  //   const { getEditorState, setEditorState } = blockProps;
-  //   const key = block.getKey();
-  //   const editorState = getEditorState();
-  //   const currentblock = getCurrentBlock(editorState);
-  //   if (currentblock.getKey() === key) {
-  //     return;
-  //   }
-  //   const newSelection = new SelectionState({
-  //     anchorKey: key,
-  //     focusKey: key,
-  //     anchorOffset: 0,
-  //     focusOffset: 0,
-  //   });
-  //   setEditorState(EditorState.forceSelection(editorState, newSelection));
-  // };
+  componentDidMount() {
+    this.focusBlock();
+  }
 
-  handleClick = event => {
-    console.log('keydown in imge');
+  focusBlock = () => {
+    const { block, blockProps } = this.props;
+    const { getEditorState, setEditorState } = blockProps;
+    const key = block.getKey();
+    const editorState = getEditorState();
+    const currentblock = getSelectedBlock(editorState);
+    if (currentblock.getKey() === key) {
+      return;
+    }
+
+    const newSelection = new SelectionState({
+      anchorKey: key,
+      focusKey: key,
+      anchorOffset: 0,
+      focusOffset: 0,
+    });
+    setEditorState(EditorState.forceSelection(editorState, newSelection));
   };
 
   render() {
@@ -36,12 +38,16 @@ class BlockImage extends React.Component {
     const data = block.getData();
     const src = data.get('src');
     if (src !== null) {
-      return [
-        <img key="img" role="presentation" src={src} onClick={this.handleClick} />,
-        <figcaption key="figcaption">
-          <EditorBlock {...this.props} />
-        </figcaption>,
-      ];
+      /* eslint-disable */
+      return (
+        <Fragment>
+          <img key="img" role="presentation" src={src} onClick={this.focusBlock} />
+          <figcaption key="figcaption">
+            <EditorBlock {...this.props} />
+          </figcaption>
+        </Fragment>
+      );
+      /* eslint-enable */
     }
     return <EditorBlock {...this.props} />;
   }

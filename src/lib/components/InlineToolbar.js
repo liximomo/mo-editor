@@ -1,8 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { EditorState } from 'draft-js';
 import { INLINE } from '../TypeOfContent';
-import { getSelectionTextAll } from '../operation/Selection';
 // import cn from 'classnames';
 
 import {
@@ -39,8 +37,8 @@ class InlineToolbar extends Component {
       return cacheSelectReact;
     }
 
-    const { editorState } = this.props;
-    const selection = editorState.getSelection();
+    const { selection } = this.props;
+    // const selection = editorState.getSelection();
 
     if (selection.isCollapsed()) {
       return;
@@ -52,11 +50,16 @@ class InlineToolbar extends Component {
     return selectionRect;
   };
 
+  /**
+   * view 不为空 show view,
+   * view 为空 恢复之前状态
+   */
   showExtend = view => {
-    const { setEditorState, editorState } = this.props;
+    const { /* setEditorState, */ selection } = this.props;
 
-    if (view !== null) {
-      preservedSelection = editorState.getSelection();
+    const showView = view !== null;
+    if (showView) {
+      preservedSelection = selection;
     }
 
     cacheSelectReact = preSelectionRect;
@@ -65,8 +68,9 @@ class InlineToolbar extends Component {
         extendView: view,
       },
       () => {
-        if (!view) {
-          setEditorState(EditorState.acceptSelection(editorState, preservedSelection));
+        if (showView) {
+          // 忘记了为什么需要这个，先取消，因为会影响 input 的 aufoFocus
+          // setEditorState(editorState => EditorState.acceptSelection(editorState, preservedSelection));
         }
       }
     );
@@ -74,23 +78,20 @@ class InlineToolbar extends Component {
 
   // 是否显示
   shouldActive() {
-    const { editorState } = this.props;
-    const selection = editorState.getSelection();
+    const { selection, selectedTextLength } = this.props;
     let hasValidSelection = !selection.isCollapsed();
 
     if (hasValidSelection) {
-      const selectedText = getSelectionTextAll(editorState);
-      hasValidSelection = hasValidSelection && selectedText.length > 0;
+      hasValidSelection = hasValidSelection && selectedTextLength > 0;
     }
 
     return hasValidSelection || this.state.extendView !== null;
   }
 
   render() {
-    const { buttons, editorNode, blockMeta } = this.props;
-    const { inline } = blockMeta;
+    const { buttons, editorNode, onlyInline } = this.props;
     let avaliableButtons = buttons;
-    if (inline) {
+    if (onlyInline) {
       avaliableButtons = avaliableButtons.filter(btn => btn.type === INLINE);
     }
 

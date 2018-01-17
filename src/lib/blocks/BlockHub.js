@@ -24,13 +24,21 @@ function injectBlockPlugin(plugin) {
   BlockPlugins[withDefault.type] = withDefault;
 }
 
-function getBlockRendererFn() {
+function getBlockRendererFn(setEditorState, getEditorState) {
   return contentBlock => {
     const type = contentBlock.getType();
     const plugin = BlockPlugins[type];
-
     if (plugin) {
-      return plugin.renderer;
+      const props = plugin.props || {};
+      
+      return {
+        ...plugin.renderer,
+        props: {
+          ...props,
+          setEditorState,
+          getEditorState,
+        }
+      };
     }
 
     return null;

@@ -1,3 +1,4 @@
+import { getDefaultKeyBinding } from 'draft-js';
 import keycode from 'keycode';
 
 const commander = {};
@@ -18,4 +19,6 @@ export function execCommand(command, ...args) {
   return cmdFn(...args);
 }
 
-export function keyBinding() {}
+export function keyBindingFn(event) {
+  return getDefaultKeyBinding(event);
+}

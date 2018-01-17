@@ -52,7 +52,7 @@ export function getSelectedBlocksList(editorState) {
 }
 
 /**
- * 获得选择的第一个快的文字
+ * 获得选择的第一个块的文字
  * @param {*} editorState
  */
 export function getSelectedText(editorState) {
