@@ -9,7 +9,7 @@ import BlockHub from '../blocks/BlockHub';
 class InsertComposerBreak extends Component {
   handleButtonClick = () => {
     const { editorState, setEditorState, onInsertDone } = this.props;
-    const blockPlugin = BlockHub.getAtomicBlock(AtomicBlockBreakPlugin.type);
+    const blockPlugin = BlockHub.getAtomicBlockPlugin(AtomicBlockBreakPlugin.type);
     const { newEditorState, entityKey } = blockPlugin.createEntity(editorState);
     setEditorState(removeCurrentAndInsertAtomicBlock(newEditorState, entityKey, ' '), onInsertDone);
   };

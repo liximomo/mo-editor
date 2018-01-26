@@ -45,11 +45,11 @@ function getBlockRendererFn(setEditorState, getEditorState) {
   };
 }
 
-function getBlock(type) {
-  return BlockPlugins[type];
-}
+// function getBlock(type) {
+//   return BlockPlugins[type];
+// }
 
-function getAtomicBlock(type) {
+function getAtomicBlockPlugin(type) {
   return AtomicBlockPlugin.getPlugin(type);
 }
 
@@ -68,8 +68,7 @@ const BlockHub = {
   injectBlockPlugin,
   injectAtomicBlockPlugin,
   getBlockRendererFn,
-  getBlock,
-  getAtomicBlock,
+  getAtomicBlockPlugin,
 };
 
 export default BlockHub;

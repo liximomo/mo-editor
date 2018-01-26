@@ -1,9 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import MoEditor from '../lib';
-import registerServiceWorker from './registerServiceWorker';
-import { ColorPicker } from '../lib/components/ColorPicker';
+import App from './App';
+// import { ColorPicker } from '../lib/components/ColorPicker';
 
 // ReactDOM.render(
 //   <ColorPicker
@@ -29,5 +27,4 @@ import { ColorPicker } from '../lib/components/ColorPicker';
 //   document.getElementById('root')
 // );
 
-ReactDOM.render(<MoEditor />, document.getElementById('root'));
-registerServiceWorker();
+ReactDOM.render(<App />, document.getElementById('root'));

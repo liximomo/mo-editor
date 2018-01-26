@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
-import { Editor as DraftEditor, RichUtils } from 'draft-js';
+import { Editor as DraftEditor, RichUtils, genKey } from 'draft-js';
 import isSoftNewlineEvent from 'draft-js/lib/isSoftNewlineEvent';
 import { keyBindingFn } from './commands/CommandHub';
 import { handleInput } from './input-mods/InputMods';
@@ -10,8 +10,6 @@ import { HANDLED, NOT_HANDLED } from './DraftConstants';
 import { getSelectedBlock, getSelectionTextAll } from './operation/Selection';
 import { toggleBlockType, insertNewBlock, createBlock } from './operation/Block';
 
-import createEditorState from './createEditorState';
-import decorators from './decorators';
 import blockRenderMap from './blocks/blockRenderMap';
 import getBlockMeta from './blocks/getBlockMeta';
 import BlockHub from './blocks/BlockHub';
@@ -51,6 +49,8 @@ const defaultBlockButtons = [InsertComposerImage, InsertComposerBreak];
 export default class Editor extends Component {
   static propTypes = {
     buttons: PropTypes.arrayOf(PropTypes.string),
+    onChange: PropTypes.func.isRequired,
+    editorState: PropTypes.object.isRequired,
   };
 
   static defaultProps = {
@@ -70,7 +70,6 @@ export default class Editor extends Component {
 
     this.state = {
       isPopoverActive: false,
-      editorState: createEditorState(null, null, decorators),
     };
 
     this.blockRendererFn = BlockHub.getBlockRendererFn(this.setEditorState, this.getEditorState);
@@ -78,7 +77,7 @@ export default class Editor extends Component {
 
   getChildContext() {
     return {
-      editorState: this.state.editorState,
+      editorState: this.props.editorState,
       setEditorState: this.setEditorState,
       getEditor: this.getEditor,
     };
@@ -107,7 +106,7 @@ export default class Editor extends Component {
   };
 
   getEditorState = () => {
-    return this.state.editorState;
+    return this.props.editorState;
   };
 
   focus = () => {
@@ -185,14 +184,16 @@ export default class Editor extends Component {
       nextState = editorState;
     }
 
-    this.setState({ editorState: nextState }, () => {
-      if (cb) cb(this);
-      this.focus();
-    });
+    this.onChange(nextState);
+
+    // 这里的 cb 并没有达到语义上的效果，因为不想让 cb 的执行逻辑暴露给组件消费者
+    if (cb) {
+      cb();
+    }
   };
 
   onChange = editorState => {
-    this.setState({ editorState });
+    this.props.onChange(editorState);
   };
 
   handleBeforeInput = (chars, editorState) => {

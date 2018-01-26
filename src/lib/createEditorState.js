@@ -1,6 +1,11 @@
-import { EditorState, ContentState } from 'draft-js';
+import { EditorState, ContentState, CompositeDecorator } from 'draft-js';
+import DecoratorLink from './decorators/DecoratorLink';
 
-export default function createEditorState(content, convert, decorators) {
+function composeDefaultDecorator(decoratorList) {
+  return new CompositeDecorator([DecoratorLink, ...decoratorList]);
+}
+
+export default function createEditorState(content, convert, decorators = []) {
   let contentState;
   if (content == null) {
     contentState = ContentState.createFromText('');
@@ -10,5 +15,5 @@ export default function createEditorState(content, convert, decorators) {
     contentState = convert(content);
   }
 
-  return EditorState.createWithContent(contentState, decorators);
+  return EditorState.createWithContent(contentState, composeDefaultDecorator(decorators));
 };

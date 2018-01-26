@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "classnames": "^2.2.5",
-    "draft-js": "^0.10.4",
+    "draft-js": "^0.10.5",
     "immutable": "^3.8.2",
     "keycode": "^2.1.9",
     "prop-types": "^15.6.0",
