@@ -4,7 +4,6 @@ import MoEditor, {
   convertToDocumentModel,
   convertFromDocumentModel,
 } from '../lib';
-import './App.css';
 
 const STORAGE_KEY = '@contentModel';
 
@@ -17,11 +16,12 @@ class App extends Component {
   }
 
   componentDidMount() {
-    setTimeout(() => {
+    setInterval(() => {
       localStorage.setItem(
         STORAGE_KEY,
         JSON.stringify(convertToDocumentModel(this.state.editorState.getCurrentContent()))
       );
+      console.log('saved');
     }, 10 * 1000);
   }
 

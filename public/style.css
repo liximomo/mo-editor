@@ -1,0 +1,465 @@
+@charset "UTF-8";
+/**
+ * Posts
+ */
+.post-header {
+  text-transform: capitalize;
+  margin-bottom: 30px;
+}
+
+.post-title {
+  font-size: 1.6875rem;
+}
+@media screen and (min-width: 768px) {
+  .post-title {
+    font-size: 2.25rem;
+    letter-spacing: -1px;
+    line-height: 1;
+  }
+}
+
+.post-content {
+  position: relative;
+  word-break: break-word;
+  word-wrap: break-word;
+  margin-bottom: 30px;
+  font-size: 1.125rem;
+  line-height: 1.3125;
+}
+@media screen and (min-width: 576px) {
+  .post-content {
+    line-height: 1.5;
+  }
+}
+@media screen and (min-width: 768px) {
+  .post-content {
+    line-height: 1.6875;
+  }
+}
+.post-content ul,
+.post-content ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.post-content h1 {
+  font-size: 1.9125rem;
+}
+.post-content h2 {
+  font-size: 1.6734375rem;
+}
+.post-content h3 {
+  font-size: 1.1953125rem;
+}
+.post-content h4 {
+  font-size: 1.0996875rem;
+}
+.post-content h5 {
+  font-size: 0.95625rem;
+}
+.post-content h6 {
+  font-size: 1.125rem;
+  font-size: 0.95625rem;
+}
+.post-content p {
+  margin-top: 30px;
+}
+.post-content blockquote + p,
+.post-content p + p,
+.post-content ol + p,
+.post-content ul + p {
+  margin-top: 21px;
+}
+.post-content h2 + p {
+  margin-top: 14px;
+}
+.post-content h3 + p {
+  margin-top: 8px;
+}
+.post-content h4 + p {
+  margin-top: 6px;
+}
+.post-content blockquote {
+  margin-top: 30px;
+}
+.post-content blockquote + blockquote {
+  margin-top: 0;
+  padding-top: 19px;
+}
+.post-content p + blockquote,
+.post-content ul + blockquote,
+.post-content ol + blockquote {
+  margin-top: 21px;
+}
+.post-content h2 + blockquote {
+  margin-top: 14px;
+}
+.post-content h3 + blockquote {
+  margin-top: 8px;
+}
+.post-content h4 + blockquote {
+  margin-top: 6px;
+}
+.post-content ul, .post-content ol {
+  margin-top: 30px;
+}
+.post-content blockquote + ol,
+.post-content blockquote + ul,
+.post-content p + ol,
+.post-content p + ul,
+.post-content ul + ol,
+.post-content ol + ul {
+  margin-top: 21px;
+}
+.post-content h2 + ol,
+.post-content h2 + ul {
+  margin-top: 14px;
+}
+.post-content h3 + ol,
+.post-content h3 + ul {
+  margin-top: 8px;
+}
+.post-content h4 + ol,
+.post-content h4 + ul {
+  margin-top: 6px;
+}
+.post-content h2 {
+  margin-top: 35px;
+}
+.post-content blockquote + h2,
+.post-content p + h2,
+.post-content ol + h2,
+.post-content ul + h2 {
+  margin-top: 26px;
+}
+.post-content h3 + h2 {
+  margin-top: -3px;
+}
+.post-content h4 + h2 {
+  margin-top: -3px;
+}
+.post-content h3 {
+  margin-top: 45px;
+}
+.post-content blockquote + h3,
+.post-content p + h3,
+.post-content ol + h3,
+.post-content ul + h3 {
+  margin-top: 28px;
+}
+.post-content h2 + h3 {
+  margin-top: 1px;
+}
+.post-content h4 + h3 {
+  margin-top: 23px;
+}
+.post-content h4 {
+  margin-top: 31px;
+}
+.post-content blockquote + h4,
+.post-content p + h4,
+.post-content ol + h4,
+.post-content ul + h4 {
+  margin-top: 22px;
+}
+.post-content h2 + h4 {
+  margin-top: 3px;
+}
+.post-content h3 + h4 {
+  margin-top: 23px;
+}
+.post-content figure,
+.post-content pre {
+  margin-top: 44px;
+}
+.post-content blockquote + figure,
+.post-content p + figure,
+.post-content blockquote + pre,
+.post-content p + pre,
+.post-content ol + figure,
+.post-content ul + figure,
+.post-content ol + pre,
+.post-content ul + pre {
+  margin-top: 35px;
+}
+.post-content h2 + figure,
+.post-content h2 + pre {
+  margin-top: 38px;
+}
+.post-content h3 + figure,
+.post-content h3 + pre {
+  margin-top: 36px;
+}
+.post-content h4 + figure,
+.post-content h4 + pre {
+  margin-top: 36px;
+}
+.post-content hr {
+  margin-top: 44px;
+  margin-bottom: 34px;
+}
+.post-content title {
+  margin-top: 31px;
+}
+.post-content title + p {
+  margin-top: 10px;
+}
+.post-content iframe {
+  margin: 0;
+  margin-top: 24px;
+}
+.post-content img {
+  display: block;
+  max-width: 100%;
+  margin: 0 auto;
+}
+.post-content blockquote {
+  border-left: 3px solid rgba(0, 0, 0, 0.8);
+  padding-left: 20px;
+  padding-bottom: 2px;
+  font-weight: 400;
+  font-style: italic;
+  font-size: 21px;
+  line-height: 1.58;
+  letter-spacing: -.003em;
+}
+.post-content blockquote code {
+  background: rgba(0, 0, 0, 0.05);
+  padding: 3px 4px;
+  margin: 0 2px;
+  font-size: 16px;
+  font-style: normal;
+}
+.post-content hr {
+  box-sizing: content-box;
+  height: 0;
+  display: block;
+  border: 0;
+  text-align: center;
+  overflow: visible;
+}
+.post-content hr:before {
+  content: '...';
+  display: inline-block;
+  margin-left: 9.6px;
+  color: rgba(0, 0, 0, 0.6);
+  position: relative;
+  top: -30px;
+  font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+  font-weight: 400;
+  font-style: italic;
+  font-size: 28px;
+  letter-spacing: 9.6px;
+}
+.post-content ol {
+  counter-reset: olItem;
+}
+.post-content ol > li,
+.post-content ul > li {
+  margin-left: 30px;
+  margin-bottom: 14px;
+}
+.post-content ol > li:before,
+.post-content ul > li:before {
+  position: absolute;
+  box-sizing: border-box;
+  width: 70px;
+  left: -39px;
+  text-align: right;
+  display: inline-block;
+}
+.post-content ol > li p,
+.post-content ul > li p {
+  margin: 0;
+  display: inline-block;
+}
+.post-content ul > li:before {
+  padding-right: 15px;
+  content: '•';
+}
+.post-content ol > li:before {
+  font-feature-settings: 'liga' on, 'lnum' on;
+  padding-right: 12px;
+  counter-increment: olItem;
+  content: counter(olItem) ".";
+}
+@media screen and (min-width: 768px) {
+  .post-content h1 {
+    font-size: 2.25rem;
+  }
+  .post-content h2 {
+    font-size: 1.96875rem;
+  }
+  .post-content h3 {
+    font-size: 1.40625rem;
+  }
+  .post-content h4 {
+    font-size: 1.29375rem;
+  }
+  .post-content h5 {
+    font-size: 1.125rem;
+  }
+  .post-content h6 {
+    margin-top: 1.125rem;
+    font-size: 1.125rem;
+    color: #aaa;
+  }
+  .post-content h1,
+  .post-content h2,
+  .post-content h3,
+  .post-content h4,
+  .post-content h5,
+  .post-content h6,
+  .post-content p,
+  .post-content blockquote,
+  .post-content pre,
+  .post-content ul,
+  .post-content ol,
+  .post-content dl,
+  .post-content figure,
+  .post-content iframe {
+    margin-bottom: 0px;
+  }
+  .post-content p {
+    margin-top: 38px;
+  }
+  .post-content blockquote + p,
+  .post-content p + p,
+  .post-content ol + p,
+  .post-content ul + p {
+    margin-top: 29px;
+  }
+  .post-content h2 + p {
+    margin-top: 18px;
+  }
+  .post-content h3 + p {
+    margin-top: 8px;
+  }
+  .post-content h4 + p {
+    margin-top: 6px;
+  }
+  .post-content blockquote {
+    margin-top: 38px;
+  }
+  .post-content blockquote + blockquote {
+    margin-top: 0;
+    padding-top: 27px;
+  }
+  .post-content p + blockquote,
+  .post-content ul + blockquote,
+  .post-content ol + blockquote {
+    margin-top: 29px;
+  }
+  .post-content h2 + blockquote {
+    margin-top: 18px;
+  }
+  .post-content h3 + blockquote {
+    margin-top: 12px;
+  }
+  .post-content h4 + blockquote {
+    margin-top: 10px;
+  }
+  .post-content ol,
+  .post-content ul {
+    margin-top: 38px;
+  }
+  .post-content blockquote + ol,
+  .post-content blockquote + ul,
+  .post-content p + ol,
+  .post-content p + ul,
+  .post-content ul + ol,
+  .post-content ol + ul {
+    margin-top: 29px;
+  }
+  .post-content h2 + ol,
+  .post-content h2 + ul {
+    margin-top: 18px;
+  }
+  .post-content h3 + ol,
+  .post-content h3 + ul {
+    margin-top: 12px;
+  }
+  .post-content h4 + ol,
+  .post-content h4 + ul {
+    margin-top: 10px;
+  }
+  .post-content h2 {
+    margin-top: 63px;
+  }
+  .post-content blockquote + h2,
+  .post-content p + h2,
+  .post-content ol + h2,
+  .post-content ul + h2 {
+    margin-top: 54px;
+  }
+  .post-content h3 {
+    margin-top: 53px;
+  }
+  .post-content blockquote + h3,
+  .post-content p + h3,
+  .post-content ol + h3,
+  .post-content ul + h3 {
+    margin-top: 56px;
+  }
+  .post-content h2 + h3 {
+    margin-top: 1px;
+  }
+  .post-content h4 + h3 {
+    margin-top: 31px;
+  }
+  .post-content h4 {
+    margin-top: 39px;
+  }
+  .post-content blockquote + h4,
+  .post-content p + h4,
+  .post-content ol + h4,
+  .post-content ul + h4 {
+    margin-top: 30px;
+  }
+  .post-content h2 + h4 {
+    margin-top: 3px;
+  }
+  .post-content h3 + h4 {
+    margin-top: 31px;
+  }
+  .post-content title {
+    margin-top: 39px;
+  }
+  .post-content title + p {
+    margin-top: 10px;
+  }
+  .post-content figure,
+  .post-content pre {
+    margin-top: 52px;
+  }
+  .post-content blockquote + figure,
+  .post-content p + figure,
+  .post-content blockquote + pre,
+  .post-content p + pre,
+  .post-content ol + figure,
+  .post-content ul + figure,
+  .post-content ol + pre,
+  .post-content ul + pre {
+    margin-top: 43px;
+  }
+  .post-content h2 + figure,
+  .post-content h2 + pre {
+    margin-top: 46px;
+  }
+  .post-content h3 + figure,
+  .post-content h3 + pre {
+    margin-top: 44px;
+  }
+  .post-content h4 + figure,
+  .post-content h4 + pre {
+    margin-top: 44px;
+  }
+  .post-content hr {
+    margin-top: 52px;
+    margin-bottom: 42px;
+  }
+  .post-content iframe {
+    margin: 0;
+    margin-top: 24px;
+  }
+}

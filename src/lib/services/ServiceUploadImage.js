@@ -1,6 +1,13 @@
 export default function uploadImg(file) {
-  const url = URL.createObjectURL(file);
-  return Promise.resolve({
-    src: url,
+  return new Promise(resolve => {
+    const filereader = new FileReader();
+
+    filereader.addEventListener('load', function() {
+      resolve({
+        src: filereader.result,
+      });
+    });
+
+    filereader.readAsDataURL(file);
   });
 }

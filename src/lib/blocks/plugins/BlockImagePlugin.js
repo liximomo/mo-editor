@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { Fragment } from 'react';
+import React from 'react';
 import { EditorState, EditorBlock, SelectionState } from 'draft-js';
 import { IMAGE } from '../TypeOfBlock';
 import { getSelectedBlock } from '../../operation/Selection';
@@ -40,12 +40,12 @@ class BlockImage extends React.Component {
     if (src !== null) {
       /* eslint-disable */
       return (
-        <Fragment>
-          <img key="img" role="presentation" src={src} onClick={this.focusBlock} />
-          <figcaption key="figcaption">
+        <div className="MoImage">
+          <img role="presentation" src={src} onClick={this.focusBlock} />
+          <figcaption>
             <EditorBlock {...this.props} />
           </figcaption>
-        </Fragment>
+        </div>
       );
       /* eslint-enable */
     }

@@ -15,3 +15,8 @@
 .DraftEditor-root {
   z-index: $editor-editable-zIndex;
 }
+
+.MoImage figcaption > .public-DraftStyleDefault-block {
+  font-size: 0.8em;
+  text-align: center;
+}
