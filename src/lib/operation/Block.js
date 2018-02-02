@@ -88,10 +88,8 @@ export function insertNewBlock(editorState, block) {
   return EditorState.push(editorState, newContent, OpType.INSERT_BLOCK);
 }
 
-/*
- * 替换选择所在的当前块，被替换的块应该总是空的
- */
-export function removeCurrentAndInsertNewBlock(editorState, block) {
+
+function replaceBlock(editorState, fragmentArray) {
   const contentState = editorState.getCurrentContent();
   const selectionState = editorState.getSelection();
 
@@ -100,8 +98,6 @@ export function removeCurrentAndInsertNewBlock(editorState, block) {
   const targetSelection = afterRemoval.getSelectionAfter();
 
   const asAtomicBlock = Modifier.setBlockType(afterRemoval, targetSelection, BlockType.ATOMIC);
-
-  const fragmentArray = [block, createBlock()];
 
   const fragment = BlockMapBuilder.createFromArray(fragmentArray);
 
@@ -115,19 +111,18 @@ export function removeCurrentAndInsertNewBlock(editorState, block) {
   return EditorState.push(editorState, newContent, OpType.INSERT_BLOCK);
 }
 
+
 /*
  * 替换选择所在的当前块，被替换的块应该总是空的
  */
-export function removeCurrentAndInsertAtomicBlock(editorState, entityKey, character) {
-  const contentState = editorState.getCurrentContent();
-  const selectionState = editorState.getSelection();
+export function removeCurrentAndInsertNewBlock(editorState, block) {
+  return replaceBlock(editorState, [block, createBlock()]);
+}
 
-  const afterRemoval = Modifier.removeRange(contentState, selectionState, 'backward');
-
-  const targetSelection = afterRemoval.getSelectionAfter();
-
-  const asAtomicBlock = Modifier.setBlockType(afterRemoval, targetSelection, BlockType.ATOMIC);
-
+/*
+ * 用原子块替换选择所在的当前块，被替换的块应该总是空的
+ */
+export function replaceWithAtomicBlockAndInsertEmptyBlock(editorState, entityKey, character) {
   const charData = CharacterMetadata.create({ entity: entityKey });
 
   const fragmentArray = [
@@ -140,14 +135,29 @@ export function removeCurrentAndInsertAtomicBlock(editorState, entityKey, charac
     createBlock(),
   ];
 
-  const fragment = BlockMapBuilder.createFromArray(fragmentArray);
+  return replaceBlock(editorState, fragmentArray);
+}
 
-  const withBlock = Modifier.replaceWithFragment(asAtomicBlock, targetSelection, fragment);
+/*
+ * 用原子块替换当前块
+ */
+export function replaceWithAtomicBlock(editorState, entityKey, character) {
+  const charData = CharacterMetadata.create({ entity: entityKey });
 
-  const newContent = withBlock.merge({
-    selectionBefore: selectionState,
-    selectionAfter: withBlock.getSelectionAfter().set('hasFocus', true),
-  });
+  const fragmentArray = [
+    new ContentBlock({
+      type: BlockType.ATOMIC,
+      text: character,
+      key: genKey(),
+      characterList: List(Repeat(charData, character.length)),
+    }),
+  ];
 
-  return EditorState.push(editorState, newContent, OpType.INSERT_BLOCK);
+  return replaceBlock(editorState, fragmentArray);
+}
+
+export function getNextBlock(block, content) {
+  const blockMap = content.getBlockMap();
+  const blocksAfter = blockMap.toSeq().skipUntil((v) => (v === block)).rest().first();
+  return blocksAfter;
 }
